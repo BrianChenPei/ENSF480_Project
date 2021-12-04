@@ -1,9 +1,21 @@
 package SystemUI;
 
+import java.util.*;
+import java.lang.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import javax.swing.SwingConstants;
+import javax.swing.event.*;
+
+
+
+import javax.swing.ScrollPaneConstants;
+
+import Property.*;
+import PRMS.*;
+import Email.*;
+import Users.*;
 
 /**
  * @version 1.0
@@ -21,14 +33,31 @@ public class GUI extends JFrame{
     private JPanel emailPanel;
     private JPanel landlordPanel;
     private JPanel managerPanel;
+    private JPanel notificationPanel;
+    boolean loggedIn = false;
+
+    public GUI(){
+        Login.getOnlyInstance();
+        createLoginPanel();
+        createSearchPanel();
+        createPropertyPanel();
+        createLandlordPanel();
+        createManagerPanel();
+        createNotificationPanel();
+        createFrame();
+    }
 
     public void display(){
 
     }
 
-    /*public Login login(){
-
-    }*/
+    public void login(String username, String password){
+         loggedIn = Login.getOnlyInstance().login(username, password);
+         if(loggedIn){
+             createManagerPanel();
+             createLandlordPanel();
+         }
+    }
 
     private void createFrame(){
         frame = new JFrame("Property Rental Management System");
@@ -64,7 +93,16 @@ public class GUI extends JFrame{
         JButton enterButton = new JButton("Enter");
         enterButton.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent evt){
-                  //  frame.setContentPane(propertyPanel);
+                    login(usernameField.getText(), passwordField.getText());
+                    usernameField.setText(" ");
+                    passwordField.setText(" ");
+                    c.gridx = 2;
+                    c.gridy = 4;
+                    if(loggedIn){
+                        loginPanel.add(new JLabel("Logged in"), c);
+                        updateMenuBar();
+                    }
+                    frame.validate();
                 }
             }
         );
@@ -125,6 +163,8 @@ public class GUI extends JFrame{
         searchButton.addActionListener(
             new ActionListener(){
                 public void actionPerformed(ActionEvent evt){
+                //search with PRMS
+                //update propertyPanel
                  frame.setContentPane(propertyPanel);
                  frame.validate();
             }
@@ -135,45 +175,118 @@ public class GUI extends JFrame{
 
     private void createPropertyPanel(){
         propertyPanel = new JPanel();
-        propertyPanel.add(new JLabel("Property"));
+        ArrayList<String> lists = new ArrayList<>(15);
+        //make Strings out of query results
+        for(int i = 0; i < 15; i++){
+            lists.add("TESTTESTTESTESTESTESTESTESTESTESTESTESTESTESTEST"+String.valueOf(i));
+        }
+        JScrollPane scroll = new JScrollPane();
+        JList<String> list = new JList<String>(lists.toArray(new String[lists.size()]));
+        list.addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent e){
+                createEmailPanel(list.getSelectedValue());
+                frame.setContentPane(emailPanel);
+                frame.validate();
+            }
+        });
+        scroll.setViewportView(list);
+        list.setLayoutOrientation(JList.VERTICAL);
+        scroll.createVerticalScrollBar();
+        propertyPanel.add(scroll);
     }
 
-    private void createEmailPanel(){
+    private void createEmailPanel(String s){
+        emailPanel = new JPanel(new BorderLayout());
+        emailPanel.add("North", new JLabel("Send email to landlord of: "+s));
+        JTextArea writingSpace = new JTextArea(30, 50);
+        emailPanel.add("Center", writingSpace);
+        JButton sendButton = new JButton("Send");
+        sendButton.addActionListener(
+            new ActionListener(){
+                public void actionPerformed(ActionEvent evt){
+                    //send email to landlord
+                    frame.setContentPane(propertyPanel);
+                     frame.validate();
+                }
+            }
+        );
+        emailPanel.add("East", sendButton);
+
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(
+            new ActionListener(){
+                public void actionPerformed(ActionEvent evt){
+                    frame.setContentPane(propertyPanel);
+                    frame.validate();
+                }
+            }
+        );
+        emailPanel.add("West", backButton);
+
         
     }
 
     private void createLandlordPanel(){
+        if(loggedIn){
+            landlordPanel = new JPanel(new BorderLayout());
+            //create a menu bar for the buttons for landlord
+            JMenuItem list = new JMenuItem("List");
+            JMenuItem modify = new JMenuItem("Modify");
+            JMenuBar landlordBar = new JMenuBar();
+            landlordBar.add(list);
+            landlordBar.add(modify);
 
-        //create a menu bar for the buttons for landlord
-        JMenuItem list = new JMenuItem("List");
-        JMenuItem modify = new JMenuItem("Modify");
-        JMenuBar landlordBar = new JMenuBar();
-        landlordBar.add(list);
-        landlordBar.add(modify);
-
-        landlordPanel.add("South", landlordBar);
+            landlordPanel.add("South", landlordBar);
+        }else{
+            landlordPanel = new JPanel(new BorderLayout());
+            landlordPanel.add("South", new JLabel("Must sign in to access this page"));
+        }
     }
 
     private void createManagerPanel(){
-        managerPanel = new JPanel(new BorderLayout());
-        createMenuBar();
-        managerPanel.add("North", menu);
         //create menu bar for buttons
-        JMenuItem report = new JMenuItem("Report");
-        JMenuItem fees = new JMenuItem("Edit Fees");
-        JMenuItem userInfo = new JMenuItem("User Info");
-        JMenuItem properties = new JMenuItem("Properties");
-        JMenuBar managerBar = new JMenuBar();
-        managerBar.add(report);
-        managerBar.add(fees);
-        managerBar.add(userInfo);
-        managerBar.add(properties);
-        managerPanel.add("South", managerBar);
+        
+        if(loggedIn){
+            managerPanel = new JPanel(new BorderLayout());
+            JMenuItem report = new JMenuItem("Report");
+            JMenuItem fees = new JMenuItem("Edit Fees");
+            JMenuItem userInfo = new JMenuItem("User Info");
+            JMenuItem properties = new JMenuItem("Properties");
+            JMenuBar managerBar = new JMenuBar();
+            managerBar.add(report);
+            managerBar.add(fees);
+            managerBar.add(userInfo);
+            managerBar.add(properties);
+            managerPanel.add("South", managerBar);
+        }else{
+            managerPanel = new JPanel(new BorderLayout());
+            managerPanel.add("South", new JLabel("Must sign in to access this page"));
+        }
+    }
+
+    private void createNotificationPanel(){
+        notificationPanel = new JPanel(new BorderLayout());
+
+    }
+
+    private void updateMenuBar(){
+        JMenuItem notif = new JMenuItem("Notifications");
+        notif.addActionListener(
+            new ActionListener(){
+                public void actionPerformed(ActionEvent evt){
+                    frame.setContentPane(notificationPanel);
+                    frame.validate();
+                }
+            }
+        );
+        menu.add(notif);   
     }
 
     private void createMenuBar(){
         JMenuItem log = new JMenuItem("Login");
         JMenuItem search = new JMenuItem("Search");
+        JMenuItem landlord = new JMenuItem("Landlord");
+        JMenuItem manager = new JMenuItem("Manager");
         log.addActionListener(
             new ActionListener(){
                 public void actionPerformed(ActionEvent evt){
@@ -191,16 +304,34 @@ public class GUI extends JFrame{
             }
         }
         );
+        
+        landlord.addActionListener(
+            new ActionListener(){
+                public void actionPerformed(ActionEvent evt){
+                    frame.setContentPane(landlordPanel);
+                    frame.validate();
+            }
+        }
+        );
+
+        manager.addActionListener(
+            new ActionListener(){
+                public void actionPerformed(ActionEvent evt){
+                    createManagerPanel();
+                    frame.setContentPane(managerPanel);
+                    frame.validate();
+            }
+        }
+        );
         menu = new JMenuBar();
         menu.add(log);
         menu.add(search);
+        menu.add(landlord);
+        menu.add(manager);
     }
 
     public static void main(String[] args){
         GUI g = new GUI();
-        g.createLoginPanel();
-        g.createSearchPanel();
-        g.createPropertyPanel();
-        g.createFrame();
+
     }
 }
