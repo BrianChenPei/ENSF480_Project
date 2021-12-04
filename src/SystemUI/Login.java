@@ -2,6 +2,8 @@ package SystemUI;
 import java.util.*;
 import java.lang.*;
 
+import PRMS.*;
+
 /**
  * @version 1.0
  * @since 1.0
@@ -14,7 +16,15 @@ class Login {
     private ArrayList<String> usernames;
     public static Login onlyInstance;
 
-    public Login getOnlyInstance(){
+    public boolean login(String username, String password){
+        if(onlyInstance.usernames.contains(username) && onlyInstance.passwords.contains(password)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public static Login getOnlyInstance(){
         if(onlyInstance == null){
             onlyInstance = new Login();
         }
@@ -43,5 +53,8 @@ class Login {
     private Login(){
         passwords = new ArrayList<>();
         usernames = new ArrayList<>();
+        //populate arraylists from PRMS
+        passwords.add("test");
+        usernames.add("user");
     }
 }
