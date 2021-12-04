@@ -2,6 +2,12 @@ package SystemUI;
 import java.util.*;
 import java.lang.*;
 
+/**
+ * @version 1.0
+ * @since 1.0
+ * @author Kaitlin Culligan <a
+ * href="mailto: kaitlin.culligan@ucalgary.ca">kaitlin.culligan@ucalgary.ca</a>
+ */
 
 class Login {
     private ArrayList<String> passwords;
