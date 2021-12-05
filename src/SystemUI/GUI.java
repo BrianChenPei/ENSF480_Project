@@ -36,6 +36,7 @@ public class GUI extends JFrame{
     private JPanel managerPanel;
     private JPanel notificationPanel;
     private JPanel previousPanel;
+    private JPanel listPanel;
     boolean loggedIn = false;
     boolean notifications = true;
 
@@ -251,7 +252,9 @@ public class GUI extends JFrame{
             list.addActionListener(
                 new ActionListener(){
                     public void actionPerformed(ActionEvent evt){
-                        //editing popup
+                        createListPanel();
+                        frame.setContentPane(listPanel);
+                        frame.validate();
                     }
                 }
             );
@@ -259,7 +262,23 @@ public class GUI extends JFrame{
             modify.addActionListener(
                 new ActionListener(){
                     public void actionPerformed(ActionEvent evt){
-                        //editing popup
+                        ArrayList<String> lists = new ArrayList<>(15);
+                        //make Strings out of query results
+                        for(int i = 0; i < 15; i++){
+                            lists.add("TESTTESTTESTESTESTESTESTESTESTESTESTESTESTESTEST"+String.valueOf(i));
+                        }
+                        JScrollPane scroll = new JScrollPane();
+                        JList<String> list = new JList<String>(lists.toArray(new String[lists.size()]));
+                        list.addListSelectionListener(new ListSelectionListener(){
+                            public void valueChanged(ListSelectionEvent e){
+                                String state = JOptionPane.showInputDialog(null, "Please enter the new listing state");
+                                //update PRMS
+                            }
+                        });
+                        scroll.setViewportView(list);
+                        list.setLayoutOrientation(JList.VERTICAL);
+                        scroll.createVerticalScrollBar();
+                        managerPanel.add("Center", scroll);
                     }
                 }
             );
@@ -297,7 +316,9 @@ public class GUI extends JFrame{
             fees.addActionListener(
                 new ActionListener(){
                     public void actionPerformed(ActionEvent evt){
-                        //editing popup
+                        int amount = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter the new amount in dollars:"));
+                        int time = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter the new time in days:"));
+                        //update prms
                     }
                 }
             );
@@ -305,7 +326,22 @@ public class GUI extends JFrame{
             userInfo.addActionListener(
                 new ActionListener(){
                     public void actionPerformed(ActionEvent evt){
-                        //editing popup
+                        ArrayList<String> lists = new ArrayList<>(15);
+                        //make Strings out of query results
+                        for(int i = 0; i < 15; i++){
+                            lists.add("TESTTESTTESTESTESTESTESTESTESTESTESTESTESTESTEST"+String.valueOf(i));
+                        }
+                        JScrollPane scroll = new JScrollPane();
+                        JList<String> list = new JList<String>(lists.toArray(new String[lists.size()]));
+                        list.addListSelectionListener(new ListSelectionListener(){
+                            public void valueChanged(ListSelectionEvent e){
+                                //editing popup?
+                            }
+                        });
+                        scroll.setViewportView(list);
+                        list.setLayoutOrientation(JList.VERTICAL);
+                        scroll.createVerticalScrollBar();
+                        managerPanel.add("Center", scroll);
                     }
                 }
             );
@@ -322,7 +358,8 @@ public class GUI extends JFrame{
                         JList<String> list = new JList<String>(lists.toArray(new String[lists.size()]));
                         list.addListSelectionListener(new ListSelectionListener(){
                             public void valueChanged(ListSelectionEvent e){
-                                //editing popup
+                                String state = JOptionPane.showInputDialog(null, "Please enter the new listing state");
+                                //update PRMS
                             }
                         });
                         scroll.setViewportView(list);
@@ -382,6 +419,86 @@ public class GUI extends JFrame{
             }
         );
         notificationPanel.add("South", optOutButton);
+    }
+
+    
+    private void createListPanel(){
+        listPanel = new JPanel();
+        GridBagConstraints c = new GridBagConstraints();
+
+        c.insets = new Insets(0,0,00,0);
+        c.gridx = 0;
+        c.gridy = 1;
+        listPanel.add(new JLabel("Type:"),c);
+        c.gridx = 2;
+        c.gridy = 1;
+        JTextField typeField = new JTextField(20);
+        listPanel.add(typeField,c);
+
+        c.gridx = 0;
+        c.gridy = 2;
+        listPanel.add(new JLabel("Number of Bedrooms:"),c);
+        c.gridx = 2;
+        c.gridy = 2;
+        JTextField bedroomField = new JTextField(20);
+        listPanel.add(bedroomField,c);
+
+        c.gridx = 0;
+        c.gridy = 3;
+        listPanel.add(new JLabel("Number of Bathrooms:"),c);
+        c.gridx = 2;
+        c.gridy = 3;
+        JTextField bathroomField = new JTextField(20);
+        listPanel.add(bathroomField,c);
+
+        c.gridx = 0;
+        c.gridy = 4;
+        listPanel.add(new JLabel("Furnished/Unfurnished:"),c);
+        c.gridx = 2;
+        c.gridy = 4;
+        JTextField furnField = new JTextField(20);
+        listPanel.add(furnField,c);
+
+        c.gridx = 0;
+        c.gridy = 5;
+        listPanel.add(new JLabel("Quadrant:"),c);
+        c.gridx = 2;
+        c.gridy = 5;
+        JTextField quadField = new JTextField(20);
+        listPanel.add(quadField,c);
+
+        c.gridx = 2;
+        c.gridy = 6;
+        c.insets = new Insets(0,0,50,0);
+        JButton listButton = new JButton("List");
+        listButton.addActionListener(
+            new ActionListener(){
+                public void actionPerformed(ActionEvent evt){
+                    //pull stuff
+                //update prms
+                JOptionPane.showMessageDialog(null, "Press the OK button below to pay",
+                    "Please Pay", JOptionPane.PLAIN_MESSAGE);
+                //update prms again
+                 frame.setContentPane(landlordPanel);
+                 frame.validate();
+                  }
+              }
+        );
+        listPanel.add(listButton,c);
+
+        c.gridx = 0;
+        c.gridy = 6;
+        c.insets = new Insets(0,0,50,0);
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(
+            new ActionListener(){
+                public void actionPerformed(ActionEvent evt){
+                 frame.setContentPane(landlordPanel);
+                 frame.validate();
+                 }
+             }
+       );
+        listPanel.add(backButton,c);
     }
 
     private void updateMenuBar(){
