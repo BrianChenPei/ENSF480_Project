@@ -5,6 +5,7 @@ import java.lang.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.Color.*;
 import javax.swing.SwingConstants;
 import javax.swing.event.*;
 
@@ -34,7 +35,9 @@ public class GUI extends JFrame{
     private JPanel landlordPanel;
     private JPanel managerPanel;
     private JPanel notificationPanel;
+    private JPanel previousPanel;
     boolean loggedIn = false;
+    boolean notifications = true;
 
     public GUI(){
         Login.getOnlyInstance();
@@ -99,7 +102,20 @@ public class GUI extends JFrame{
                     c.gridx = 2;
                     c.gridy = 4;
                     if(loggedIn){
-                        loginPanel.add(new JLabel("Logged in"), c);
+                        JButton logoutButton = new JButton("Log Out");
+                        logoutButton.addActionListener(new ActionListener(){
+                            public void actionPerformed(ActionEvent evt){
+                                loggedIn = false;
+                                loginPanel.remove(logoutButton);
+                                //update logged in panels
+                                createLandlordPanel();
+                                createManagerPanel();
+                                menu.remove(4);
+                                Login.getOnlyInstance().logout();
+                                frame.validate();
+                            }
+                        });
+                        loginPanel.add(logoutButton, c);
                         updateMenuBar();
                     }
                     frame.validate();
@@ -174,7 +190,7 @@ public class GUI extends JFrame{
     }
 
     private void createPropertyPanel(){
-        propertyPanel = new JPanel();
+        propertyPanel = new JPanel(new BorderLayout());
         ArrayList<String> lists = new ArrayList<>(15);
         //make Strings out of query results
         for(int i = 0; i < 15; i++){
@@ -185,6 +201,7 @@ public class GUI extends JFrame{
         list.addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent e){
                 createEmailPanel(list.getSelectedValue());
+                previousPanel = propertyPanel;
                 frame.setContentPane(emailPanel);
                 frame.validate();
             }
@@ -192,7 +209,7 @@ public class GUI extends JFrame{
         scroll.setViewportView(list);
         list.setLayoutOrientation(JList.VERTICAL);
         scroll.createVerticalScrollBar();
-        propertyPanel.add(scroll);
+        propertyPanel.add("Center", scroll);
     }
 
     private void createEmailPanel(String s){
@@ -205,7 +222,7 @@ public class GUI extends JFrame{
             new ActionListener(){
                 public void actionPerformed(ActionEvent evt){
                     //send email to landlord
-                    frame.setContentPane(propertyPanel);
+                    frame.setContentPane(previousPanel);
                      frame.validate();
                 }
             }
@@ -216,7 +233,7 @@ public class GUI extends JFrame{
         backButton.addActionListener(
             new ActionListener(){
                 public void actionPerformed(ActionEvent evt){
-                    frame.setContentPane(propertyPanel);
+                    frame.setContentPane(previousPanel);
                     frame.validate();
                 }
             }
@@ -231,7 +248,21 @@ public class GUI extends JFrame{
             landlordPanel = new JPanel(new BorderLayout());
             //create a menu bar for the buttons for landlord
             JMenuItem list = new JMenuItem("List");
+            list.addActionListener(
+                new ActionListener(){
+                    public void actionPerformed(ActionEvent evt){
+                        //editing popup
+                    }
+                }
+            );
             JMenuItem modify = new JMenuItem("Modify");
+            modify.addActionListener(
+                new ActionListener(){
+                    public void actionPerformed(ActionEvent evt){
+                        //editing popup
+                    }
+                }
+            );
             JMenuBar landlordBar = new JMenuBar();
             landlordBar.add(list);
             landlordBar.add(modify);
@@ -249,9 +280,58 @@ public class GUI extends JFrame{
         if(loggedIn){
             managerPanel = new JPanel(new BorderLayout());
             JMenuItem report = new JMenuItem("Report");
+            report.addActionListener(
+                new ActionListener(){
+                    public void actionPerformed(ActionEvent evt){
+                        JTextArea reportWriteup = new JTextArea();
+                        String placeholder = "data";
+                        reportWriteup.setColumns(30);
+                        reportWriteup.setRows(20);
+                        reportWriteup.setText(placeholder);
+                        managerPanel.add("Center", reportWriteup);
+                        frame.validate();
+                    }
+                }
+            );
             JMenuItem fees = new JMenuItem("Edit Fees");
+            fees.addActionListener(
+                new ActionListener(){
+                    public void actionPerformed(ActionEvent evt){
+                        //editing popup
+                    }
+                }
+            );
             JMenuItem userInfo = new JMenuItem("User Info");
+            userInfo.addActionListener(
+                new ActionListener(){
+                    public void actionPerformed(ActionEvent evt){
+                        //editing popup
+                    }
+                }
+            );
             JMenuItem properties = new JMenuItem("Properties");
+            properties.addActionListener(
+                new ActionListener(){
+                    public void actionPerformed(ActionEvent evt){
+                        ArrayList<String> lists = new ArrayList<>(15);
+                        //make Strings out of query results
+                        for(int i = 0; i < 15; i++){
+                            lists.add("TESTTESTTESTESTESTESTESTESTESTESTESTESTESTESTEST"+String.valueOf(i));
+                        }
+                        JScrollPane scroll = new JScrollPane();
+                        JList<String> list = new JList<String>(lists.toArray(new String[lists.size()]));
+                        list.addListSelectionListener(new ListSelectionListener(){
+                            public void valueChanged(ListSelectionEvent e){
+                                //editing popup
+                            }
+                        });
+                        scroll.setViewportView(list);
+                        list.setLayoutOrientation(JList.VERTICAL);
+                        scroll.createVerticalScrollBar();
+                        managerPanel.add("Center", scroll);
+                    }
+                }
+            );
             JMenuBar managerBar = new JMenuBar();
             managerBar.add(report);
             managerBar.add(fees);
@@ -266,7 +346,42 @@ public class GUI extends JFrame{
 
     private void createNotificationPanel(){
         notificationPanel = new JPanel(new BorderLayout());
+        ArrayList<String> lists = new ArrayList<>(15);
+        //make Strings out of query results
+        for(int i = 0; i < 15; i++){
+            lists.add("TESTTESTTESTESTESTESTESTESTESTESTESTESTESTESTEST"+String.valueOf(i));
+        }
+        JScrollPane scroll = new JScrollPane();
+        JList<String> list = new JList<String>(lists.toArray(new String[lists.size()]));
+        list.addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent e){
+                createEmailPanel(list.getSelectedValue());
+                previousPanel = notificationPanel;
+                frame.setContentPane(emailPanel);
+                frame.validate();
+            }
+        });
+        scroll.setViewportView(list);
+        list.setLayoutOrientation(JList.VERTICAL);
+        scroll.createVerticalScrollBar();
+        notificationPanel.add("Center", scroll);
 
+        JButton optOutButton = new JButton("Notifications On");
+        optOutButton.addActionListener(
+            new ActionListener(){
+                public void actionPerformed(ActionEvent evt){
+                    if(notifications == true){
+                        notifications = false;
+                        optOutButton.setText("Notifications Off");
+                    }else{
+                        notifications = true;
+                        optOutButton.setText("Notifications On");
+                    }
+                    frame.validate();
+                }
+            }
+        );
+        notificationPanel.add("South", optOutButton);
     }
 
     private void updateMenuBar(){
@@ -274,11 +389,14 @@ public class GUI extends JFrame{
         notif.addActionListener(
             new ActionListener(){
                 public void actionPerformed(ActionEvent evt){
+                    notif.setBackground(new JButton().getBackground());
                     frame.setContentPane(notificationPanel);
                     frame.validate();
                 }
             }
         );
+        //if theres new listings and notifications is on
+        notif.setBackground(Color.RED);
         menu.add(notif);   
     }
 
