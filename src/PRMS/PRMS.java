@@ -36,11 +36,11 @@ public class PRMS {
     }
 
     public void changeFee(double fee){
-
+        postingFee = fee;
     }
 
     public void changeFeePeriod(int period){
-
+        postingPeriod = period;
     }
 
     public void MchangeState(String houseID, String newState){
