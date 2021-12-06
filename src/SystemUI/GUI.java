@@ -37,6 +37,7 @@ public class GUI extends JFrame{
     private JPanel notificationPanel;
     private JPanel previousPanel;
     private JPanel listPanel;
+    private JPanel registerPanel;
     boolean loggedIn = false;
     boolean notifications = true;
 
@@ -62,6 +63,13 @@ public class GUI extends JFrame{
              createLandlordPanel();
          }
     }
+
+    public void logout(){
+        loggedIn = false;
+        createManagerPanel();
+        createLandlordPanel();
+        updateMenuBar();
+   }
 
     private void createFrame(){
         frame = new JFrame("Property Rental Management System");
@@ -106,16 +114,14 @@ public class GUI extends JFrame{
                         JButton logoutButton = new JButton("Log Out");
                         logoutButton.addActionListener(new ActionListener(){
                             public void actionPerformed(ActionEvent evt){
-                                loggedIn = false;
-                                loginPanel.remove(logoutButton);
-                                //update logged in panels
-                                createLandlordPanel();
-                                createManagerPanel();
+                                logout();
                                 menu.remove(4);
-                                Login.getOnlyInstance().logout();
-                                frame.validate();
+                                createLoginPanel();
+                                frame.setContentPane(loginPanel);
+                                frame.revalidate();
                             }
                         });
+                        menu.remove(4);
                         loginPanel.add(logoutButton, c);
                         updateMenuBar();
                     }
@@ -421,7 +427,6 @@ public class GUI extends JFrame{
         notificationPanel.add("South", optOutButton);
     }
 
-    
     private void createListPanel(){
         listPanel = new JPanel();
         GridBagConstraints c = new GridBagConstraints();
@@ -501,23 +506,81 @@ public class GUI extends JFrame{
         listPanel.add(backButton,c);
     }
 
-    private void updateMenuBar(){
-        JMenuItem notif = new JMenuItem("Notifications");
-        notif.addActionListener(
-            new ActionListener(){
+    private void createRegisterPanel(){
+        registerPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 1;
+        c.weightx = 0.7;
+        c.weighty = 0.7;
+        registerPanel.add(new JLabel("Username:"),c);
+        c.gridx = 2;
+        JTextField usernameField = new JTextField(20);
+        registerPanel.add(usernameField,c);
+        c.gridx = 0;
+        c.gridy = 3;
+        registerPanel.add(new JLabel("Password:"),c);
+        c.gridx =2;
+        JTextField passwordField = new JTextField(20);
+        registerPanel.add(passwordField, c);
+        c.gridx = 0;
+        c.gridy = 4;
+        registerPanel.add(new JLabel("Type:"),c);
+        c.gridx =2;
+        JTextField typeField = new JTextField(20);
+        registerPanel.add(typeField, c);
+
+        c.gridx = 1;
+        c.gridy = 5;
+        JButton enterButton = new JButton("Register");
+        enterButton.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent evt){
-                    notif.setBackground(new JButton().getBackground());
-                    frame.setContentPane(notificationPanel);
+                    //register in system
                     frame.validate();
                 }
             }
         );
-        //if theres new listings and notifications is on
-        notif.setBackground(Color.RED);
-        menu.add(notif);   
+
+
+        registerPanel.add(enterButton,c);
+}
+    
+    private void updateMenuBar(){
+        if(!loggedIn){
+            JMenuItem register = new JMenuItem("Register");
+            register.addActionListener(
+                new ActionListener(){
+                    public void actionPerformed(ActionEvent evt){
+                        createRegisterPanel();
+                        frame.setContentPane(registerPanel);
+                        frame.validate();
+                }
+            }
+            );
+            menu.add(register);
+        }
+        else{
+            JMenuItem notif = new JMenuItem("Notifications");
+            notif.addActionListener(
+                new ActionListener(){
+                    public void actionPerformed(ActionEvent evt){
+                        notif.setBackground(new JButton().getBackground());
+                        frame.setContentPane(notificationPanel);
+                        frame.validate();
+                    }
+                }
+            );
+            
+            //if theres new listings and notifications is on
+            if(notifications){
+               notif.setBackground(Color.RED);
+            }
+            menu.add(notif);   
+        }
     }
 
     private void createMenuBar(){
+        JMenuItem register = new JMenuItem("Register");
         JMenuItem log = new JMenuItem("Login");
         JMenuItem search = new JMenuItem("Search");
         JMenuItem landlord = new JMenuItem("Landlord");
@@ -558,11 +621,23 @@ public class GUI extends JFrame{
             }
         }
         );
+
+        register.addActionListener(
+            new ActionListener(){
+                public void actionPerformed(ActionEvent evt){
+                    createRegisterPanel();
+                    frame.setContentPane(registerPanel);
+                    frame.validate();
+            }
+        }
+        );
+
         menu = new JMenuBar();
         menu.add(log);
         menu.add(search);
         menu.add(landlord);
         menu.add(manager);
+        menu.add(register);
     }
 
     public static void main(String[] args){

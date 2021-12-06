@@ -24,11 +24,6 @@ class Login {
         }
     }
 
-    public void logout(){
-        if(onlyInstance!= null){
-            onlyInstance = null;
-        }
-    }
 
     public static Login getOnlyInstance(){
         if(onlyInstance == null){
