@@ -1,0 +1,10 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "C:\\Users\\andca\\Documents\\JunitTesting\\junit-platform-console-standalone-1.6.0",
+        "src/Server/lib/hamcrest-core-1.3.jar",
+        "src/Server/lib/junit-4.13.2.jar",
+        "src/Server/lib/mysql-connector-java-8.0.23.jar",
+        "src/Server/lib/org_junit_platform_junit-platform-console-standalone_1.6.0_junit-platform-console-standalone-1.6.0.jar"
+    ]
+}
