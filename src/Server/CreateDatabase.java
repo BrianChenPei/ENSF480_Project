@@ -3,6 +3,11 @@ import java.sql.Connection;
 
 import java.sql.SQLException;
 import java.sql.DriverManager;
+/**
+ *
+ * @author Andres Caicedo <a
+ * href="mailto: acaicedo@ucalgary.ca">acaicedo@ucalgary.ca</a>
+ */
 
 public class CreateDatabase {
 

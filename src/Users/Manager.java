@@ -1,22 +1,31 @@
 package Users;
 import PRMS.Report;
 
-public class Manager {
+
+
+public class Manager implements User{
     private String name;
+    private String usertype = "Manager";
 
-    public Report askReport(){
 
+    public Manager() {
+        name="";
     }
 
-    public void changeFee(double fee){
-
+    public String getUsertype(){
+        return usertype;
+    }
+    
+    public Manager(String name) {
+        this.name = name;
     }
 
-    public void changeFeePeriod(int period){
-
+    public String getName() {
+        return this.name;
     }
 
-    public void changeState(String houseID, String newState){
-        
+    public void setName(String name) {
+        this.name = name;
     }
+    
 }

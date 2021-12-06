@@ -1,161 +1,123 @@
 package Property;
 
-import java.io.Serializable;
-import java.util.Random;
+/**
+ *
+ * @author Brian Chen <a
+ * href="mailto: brian.chen@ucalgary.ca">brian.chen@ucalgary.ca</a>
+ */
 
-public class Property implements Serializable{
-	private static final long serialVersionUID = 1L;
-	private int ID;
-	private String address;
-	private String type;
-	private int Bedrooms;
-	private int Bathrooms;
-	private boolean isFurnished;
-	private String cityQuadrant;
-	private String listingState = "Active";
-	private int fee;
-	private String landlordName;
-	private String landlordEmail;
+public class Property {
+    protected String id;
+    protected String listingState;
 
-	public Property(String address, String type, int Bedrooms, int Bathrooms, boolean isFurnished, String cityQuadrant,
-			String landlordName, String landlordEmail) {
-		this.ID = new Random().nextInt(1000000);
-		this.setAddress(address);
-		this.setType(type);
-		this.setBedrooms(Bedrooms);
-		this.setBathrooms(Bathrooms);
-		this.setFurnished(isFurnished);
-		this.setCityQuadrant(cityQuadrant);
-		this.setFee(fee);
-		this.setLandlordName(landlordName);
-		this.setLandlordEmail(landlordEmail);
-	}
-	
-	public Property(int ID, String address, String type, int Bedrooms, int Bathrooms, boolean isFurnished, String cityQuadrant, 
-			String listingState, String landlordName, String landlordEmail) {
-		this.ID = ID;
-		this.setAddress(address);
-		this.setType(type);
-		this.setBedrooms(Bedrooms);
-		this.setBathrooms(Bathrooms);
-		this.setFurnished(isFurnished);
-		this.setCityQuadrant(cityQuadrant);
-		this.setListingState(listingState);
-		this.setFee(fee);
-		this.setLandlordName(landlordName);
-		this.setLandlordEmail(landlordEmail);
-	}
-	
-	public Property(String address, String type, int Bedrooms, int Bathrooms, boolean isFurnished, String cityQuadrant, 
-			int fee, String landlordName, String landlordEmail) {
-		this.ID = new Random().nextInt(1000000);
-		this.setAddress(address);
-		this.setType(type);
-		this.setBedrooms(Bedrooms);
-		this.setBathrooms(Bathrooms);
-		this.setFurnished(isFurnished);
-		this.setCityQuadrant(cityQuadrant);
-		this.setFee(fee);
-		this.setLandlordName(landlordName);
-		this.setLandlordEmail(landlordEmail);
-	}
+    private String type;
+    private int bedroom;
+    private int bathroom; 
+    private boolean furnished;
+    private String location;
+    
+    private int fee;
+    private String feePeriodStart;
+    private String feePeriodEnd;
+    
+    private String landlordName;
+    private String landlordEmail;
+    
+    public void setID(String ID) {
+        this.id = ID;
+    }
 
-	public Property(int ID, String address, String type, int Bedrooms, int Bathrooms, boolean isFurnished, String cityQuadrant,
-			String listingState, int fee, String landlordName, String landlordEmail) {
-		this.ID = ID;
-		this.setAddress(address);
-		this.setType(type);
-		this.setBedrooms(Bedrooms);
-		this.setBathrooms(Bathrooms);
-		this.setFurnished(isFurnished);
-		this.setCityQuadrant(cityQuadrant);
-		this.setListingState(listingState);
-		this.setFee(fee); 
-		this.setLandlordName(landlordName);
-		this.setLandlordEmail(landlordEmail);
-	}
+    public void setState(String newState) {
+        this.listingState = newState;
+    }
+    
+    public void setType(String type) {
+        this.type = type;
+    }
+    
+    public void setBedroom(int bdrm) {
+        this.bedroom = bdrm;
+    }
+    
+    public void setBathroom(int bathroom) {
+        this.bathroom = bathroom;
+    }
+    
+    public void setFurnished(boolean furnish) {
+        this.furnished = furnish;
+    }
+    
+    public void setLocation(String location) {
+        this.location = location;
+    }
+    
+    public void setFee(int fee) {
+        this.fee = fee;
+    }
+    
+    public void setFeePeriodStart(String start) {
+        this.feePeriodStart = start;
+    }
+    
+    public void setFeePeriodEnd(String end) {
+        this.feePeriodEnd = end;
+    }
+    
+    public void setLandlordName(String name) {
+        this.landlordName = name;
+    }
+    
+    public void setLandlordEmail(String email) {
+        this.landlordEmail = email;
+    }
+    
+    public String getID() {
+        return this.id;
+    }
+    
+    public String getState() {
+        return this.listingState;
+    }
+    
+    public String getType() {
+        return this.type;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public int getBedRoom() {
+        return this.bedroom;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public int getBathroom() {
+        return this.bathroom;
+    }
 
-	public int getBedrooms() {
-		return Bedrooms;
-	}
+    public boolean getFurnish() {
+        return this.furnished;
+    }
 
-	public void setBedrooms(int Bedrooms) {
-		this.Bedrooms = Bedrooms;
-	}
+    public String getLocation() {
+        return this.location;
+    }
+    
+    public int getFee() {
+        return this.fee;
+    }
+    
+    public String getFeePeriodStart() {
+        return this.feePeriodStart;
+    }
+    
+    public String getFeePeriodEnd() {
+        return this.feePeriodEnd;
+    }
+    
+    public String getLandlordName() {
+        return this.landlordName;
+    }
+    
+    public String getLandlordEmail() {
+        return this.landlordEmail;
+    }
 
-	public int getBathrooms() {
-		return Bathrooms;
-	}
-
-	public void setBathrooms(int Bathrooms) {
-		this.Bathrooms = Bathrooms;
-	}
-
-	public boolean isFurnished() {
-		return isFurnished;
-	}
-
-	public void setFurnished(boolean isFurnished) {
-		this.isFurnished = isFurnished;
-	}
-
-	public String getCityQuadrant() {
-		return cityQuadrant;
-	}
-
-	public void setCityQuadrant(String cityQuadrant) {
-		this.cityQuadrant = cityQuadrant;
-	}
-
-	public String getListingState() {
-		return listingState;
-	}
-
-	public void setListingState(String listingState) {
-		this.listingState = listingState;
-	}
-
-	public int getFee() {
-		return fee;
-	}
-
-	public void setFee(int fee) {
-		this.fee = fee;
-	}
-
-	public int getID() {
-		return ID;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	
-	public String getLandlordName() {
-		return landlordName;
-	}
-
-	public void setLandlordName(String landlordName) {
-		this.landlordName = landlordName;
-	}
-
-	public String getLandlordEmail() {
-		return landlordEmail;
-	}
-
-	public void setLandlordEmail(String landlordEmail) {
-		this.landlordEmail = landlordEmail;
-	}
+    
 }
