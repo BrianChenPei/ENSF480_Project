@@ -1,4 +1,5 @@
 package Users;
+import PRMS.Report;
 
 public class Manager {
     private String name;

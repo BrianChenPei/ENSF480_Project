@@ -1,5 +1,5 @@
 package Users;
-
+import Property.Property;
 import java.util.ArrayList;
 
 public class Renter {

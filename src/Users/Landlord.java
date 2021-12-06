@@ -1,3 +1,6 @@
+import java.util.ArrayList; 
+import Property.Property;
+
 package Users;
 
 public class Landlord {

@@ -18,7 +18,7 @@ public class CreateDatabase {
     }
 
     public static void CreateProjectDatabase(){
-        CreateDatabase SQL = new CreateDatabase("jdbc:mysql://localhost:3306/prms", "group4", "ensf480");
+        CreateDatabase SQL = new CreateDatabase("jdbc:mysql:C:/Users/andca/Documents/GitHub/ENSF480_Project/src/Server/Database.mwb", "group4", "ensf480");
         SQL.initializeConnection();
         System.out.println("A new database has been created.");
         
@@ -48,10 +48,9 @@ public class CreateDatabase {
         java.sql.Statement stmt = null;
         try{
             stmt = c.createStatement();
-            String sql = "CREATE TABLE Property " + "(ID INT PRIMARY KEY	NOT NULL," + " type TEXT     NOT NULL," + "Bedrooms INT     NOT NULL," + 
-            "Bathrooms INT  NOT NULL," + "Furnished BOOLEAN   NOT NULL," + " cityQuadrant TEXT  NOT NULL," + 
-            " listingState TEXT     NOT NULL," + " fee REAL      NOT NULL," + " feePeriodStart TEXT		NOT NULL," + " feePeriodEnd TEXT		NOT NULL," + " landlordName TEXT		NOT NULL," +
-            " landlordEmail TEXT	NOT NULL);";
+            String sql = "CREATE TABLE Property " + "(ID INT PRIMARY KEY	NOT NULL," + " type TEXT     NOT NULL," + "Bedrooms INT     NOT NULL," 
+            + "Bathrooms INT  NOT NULL," + "Furnished BOOLEAN   NOT NULL,"+ " listingState TEXT     NOT NULL," + " fee REAL      NOT NULL," 
+            + " feePeriodStart TEXT		NOT NULL," + " feePeriodEnd TEXT		NOT NULL," + " landlordName TEXT		NOT NULL," +" landlordEmail TEXT	NOT NULL);";
             stmt.executeUpdate(sql);
             stmt.close();
         } catch(Exception e){
