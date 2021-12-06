@@ -2,12 +2,17 @@ package Users;
 
 
 
-public class Renter {
+public class Renter implements User{
     protected String searchCriteria;
+    protected String usertype = "Renter";
 
 
     public Renter() {
         searchCriteria = "";
+    }
+
+    public String getUsertype(){
+        return usertype;
     }
 
     public Renter(String searchCriteria) {

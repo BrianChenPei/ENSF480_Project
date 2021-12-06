@@ -3,10 +3,11 @@ package Users;
 import java.util.ArrayList;
 import Property.*;
 
-public class Landlord {
+public class Landlord implements User{
     private String name;
     private String email;
     private ArrayList<Property> rgedProperties;
+    private String usertype = "Landlord";
 
     public Landlord(){
         name="";
@@ -19,6 +20,9 @@ public class Landlord {
         rgedProperties = new ArrayList<Property>();
     }
 
+    public String getUsertype(){
+        return usertype;
+    }
 
     public String getName() {
         return this.name;

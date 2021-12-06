@@ -14,6 +14,10 @@ public class RegisteredRenter extends Renter{
         this.name = name;
     }
 
+    public String getUsertype(){
+        return super.usertype;
+    }
+
     public RegisteredRenter(String name, String sc) {
         super(sc);
         this.name = name;
