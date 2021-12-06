@@ -2,10 +2,15 @@ package PRMS;
 
 import Users.*;
 import Property.*;
-import Database.Database;
+import Database.*;
 import java.util.ArrayList;
+import SystemUI.*;
 
 public class PRMS {
+    private int postingPeriod;
+    private double postingFee;
+    private Database db;
+    private GUI gui;
 
     //Renterr's controller function
     public ArrayList<Property> searchProperty(String searchCri){
