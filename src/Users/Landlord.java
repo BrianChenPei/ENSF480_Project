@@ -1,19 +1,51 @@
 package Users;
 
+import java.util.ArrayList;
+import Property.*;
+
 public class Landlord {
     private String name;
     private String email;
-    private Arraylist<Property> rgedProperties;
+    private ArrayList<Property> rgedProperties;
 
-    public void registerProperty(Property p){
-
+    public Landlord(){
+        name="";
+        email="";
+        rgedProperties = new ArrayList<Property>();
+    }
+    public Landlord(String n, String e){
+        name=n;
+        email=e;
+        rgedProperties = new ArrayList<Property>();
     }
 
-    public void payFee(double money){
 
+    public String getName() {
+        return this.name;
     }
 
-    public void changeState(String houseID, String newState){
-        
+    public void setName(String name) {
+        this.name = name;
     }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public ArrayList<Property> getRgedProperties() {
+        return this.rgedProperties;
+    }
+
+    public void setRgedProperties(ArrayList<Property> rgedProperties) {
+        this.rgedProperties = rgedProperties;
+    }
+    
+    public void RegisterProperties(Property p) {
+        this.rgedProperties.add(p);
+    }
+
 }
