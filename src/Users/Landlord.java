@@ -15,10 +15,16 @@ public class Landlord implements User{
     private String email;
     private String password;
 
-    public Landlord(String fn, String e){
-            this.fname=fn;
 
+    public Landlord(String userName, String type, String fname, String lname, String email, String password) {
+        this.userName = userName;
+        this.fname = fname;
+        this.usertype = type;
+        this.lname = lname;
+        this.email = email;
+        this.password = password;
     }
+    
     public String getUserName() {
         return this.userName;
     }

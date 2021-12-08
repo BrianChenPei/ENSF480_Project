@@ -8,6 +8,15 @@ public class RegisteredRenter extends Renter{
     private String email;
     private String password;
 
+    public RegisteredRenter(String userName, String type, String fname, String lname, String email, String password) {
+        this.userName = userName;
+        this.fname = fname;
+        this.lname = lname;
+        this.usertype = type;
+        this.email = email;
+        this.password = password;
+    }
+
     public String getUserName() {
         return this.userName;
     }

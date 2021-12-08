@@ -250,7 +250,7 @@ public class DatabaseManager{
     	return false;
     }
 
-	public RegisteredRenter getLandlord(String username) {
+	public Landlord getLandlord(String username) {
     	Connection conn = null;
     	PreparedStatement getUser = null;
     	String getUserString = "SELECT * FROM User WHERE userName = ? AND type = ?";
@@ -261,7 +261,8 @@ public class DatabaseManager{
     			getUser.setString(1, username);
 				getUser.setString(2, "Landlord");
     			ResultSet rs = getUser.executeQuery();
-    			RegisteredRenter u = new RegisteredRenter();////////
+    			Landlord u = new Landlord(rs.getString(1), rs.getString(2),
+				rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
     			conn.close();
     			return u;
     		}
@@ -320,7 +321,7 @@ public class DatabaseManager{
     	return false;
     }
 
-	public RegisteredRenter getManager(String username) {
+	public Manager getManager(String username) {
     	Connection conn = null;
     	PreparedStatement getUser = null;
     	String getUserString = "SELECT * FROM User WHERE userName = ? AND type = ?";
@@ -331,7 +332,8 @@ public class DatabaseManager{
     			getUser.setString(1, username);
 				getUser.setString(2, "Manager");
     			ResultSet rs = getUser.executeQuery();
-    			RegisteredRenter u = new RegisteredRenter();////////
+    			Manager u = new Manager(rs.getString(1), rs.getString(2),
+				rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
     			conn.close();
     			return u;
     		}
@@ -399,7 +401,8 @@ public class DatabaseManager{
     			getUser = conn.prepareStatement(getUserString);
     			getUser.setString(1, username);
     			ResultSet rs = getUser.executeQuery();
-    			RegisteredRenter u = new RegisteredRenter();////////
+    			RegisteredRenter u = new RegisteredRenter(rs.getString(1), rs.getString(2),
+				rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
     			conn.close();
     			return u;
     		}
@@ -408,30 +411,6 @@ public class DatabaseManager{
     		e.printStackTrace();
     	}
     	return null;
-    }
-
-	public ArrayList<User> getAllUsers(){
-        Connection conn = null;
-        PreparedStatement getAllUsers = null;
-        String getAllUsersString = "SELECT * from User";
-        ArrayList<User> temp = new ArrayList<User>();
-        try {
-        	conn = getConn();
-        	if(conn != null) {
-        		getAllUsers = conn.prepareStatement(getAllUsersString);
-        		ResultSet rs = getAllUsers.executeQuery();
-        		while(rs.next()) {
-        			RegisteredRenter u = new RegisteredRenter();///////
-        			temp.add(u);
-        		}
-        		conn.close();
-        		return temp;
-        	}
-        	//conn.close();
-        } catch(ClassNotFoundException | SQLException e) {
-        	e.printStackTrace();
-        }
-        return null;
     }
     
 	public Report getReport(String start, String end) {
@@ -466,16 +445,16 @@ public class DatabaseManager{
     			getReport.setString(2, end);
     			ResultSet rs3 = getReport.executeQuery();
     			while(rs3.next()) {
-        			Property p = new Property(rs3.getInt(1), rs3.getString(2), rs3.getString(3), rs3.getInt(4), rs3.getInt(5),
-        					rs3.getBoolean(6), rs3.getString(7), rs3.getString(8), new PropertyFee(rs3.getString(9), rs3.getString(10)), 
-        					rs3.getString(12), rs3.getString(13));
+        			Property p = new Property(rs3.getString(1),rs3.getString(2),rs3.getInt(3),
+					rs3.getInt(4),rs3.getBoolean(5),rs3.getString(6),rs3.getString(7),rs3.getInt(8),
+					rs3.getString(9),rs3.getString(10),rs3.getString(11),rs3.getString(12));
         			temp.add(p);
     			}
     			Report Report = new Report();////////
     			//conn.close();
     			return Report;
     		}
-    		conn.close();
+    		//conn.close();
     	} catch(ClassNotFoundException | SQLException e) {
     		e.printStackTrace();
     	}
