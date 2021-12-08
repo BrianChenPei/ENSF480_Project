@@ -1,7 +1,8 @@
+package Users;
 import java.util.ArrayList; 
 import Property.Property;
 
-package Users;
+
 
 import java.util.ArrayList;
 import Property.*;

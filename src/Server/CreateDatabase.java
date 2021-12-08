@@ -3,6 +3,7 @@ import java.sql.Connection;
 
 import java.sql.SQLException;
 import java.sql.DriverManager;
+import java.sql.DatabaseMetaData;
 /**
  *
  * @author Andres Caicedo <a
@@ -11,50 +12,30 @@ import java.sql.DriverManager;
 
 public class CreateDatabase {
 
-    public final String DBURL;
-    public final String USERNAME;
-    public final String PASSWORD;
-    private Connection dbConnect;
-
-    public CreateDatabase(String DBURL, String USERNAME, String PASSWORD) {
-        this.DBURL = DBURL;
-        this.USERNAME = USERNAME;
-        this.PASSWORD = PASSWORD;
-    }
-
-    public static void CreateProjectDatabase(){
-        CreateDatabase SQL = new CreateDatabase("jdbc:mysql:C:/Users/andca/Documents/GitHub/ENSF480_Project/src/Server/Database.mwb", "group4", "ensf480");
-        SQL.initializeConnection();
-        System.out.println("A new database has been created.");
-        
-        addPropertyData(SQL.dbConnect);
-        addUserData(SQL.dbConnect);
-        try { 
-            SQL.dbConnect.close();
-        } catch (SQLException e) {
+    
+    public static void createProjectDatabase(){
+        String url = "jdbc:sqlite:C:/Users/andca/Documents/GitHub/ENSF480_Project/src/Server/ProjectDatabase.db" ;
+        try(Connection conn = DriverManager.getConnection(url)){
+            if(conn != null){
+                DatabaseMetaData meta = conn.getMetaData();
+                System.out.println("The driver name is " + meta.getDriverName());
+                System.out.println("A new database has been created.");
+                addPropertyData(conn);
+                addUserData(conn);
+                conn.close();
+            }
+        } catch(SQLException e){
             e.printStackTrace();
         }
-        
     }
-
-    public void initializeConnection() {
-        try {
-            dbConnect = DriverManager.getConnection(DBURL, USERNAME, PASSWORD);
-            System.out.println("Connection established successfully!");
-        } catch (SQLException e) {
-            System.out.println("Connection unsucessful");
-            System.out.println("Good bye!");
-            e.printStackTrace();
-            System.exit(0);
-        }
-    }
+    
 
     public static void addPropertyData(Connection c) {
         java.sql.Statement stmt = null;
         try{
             stmt = c.createStatement();
-            String sql = "CREATE TABLE Property " + "(ID INT PRIMARY KEY	NOT NULL," + " type TEXT     NOT NULL," + "Bedrooms INT     NOT NULL," 
-            + "Bathrooms INT  NOT NULL," + "Furnished BOOLEAN   NOT NULL,"+ " listingState TEXT     NOT NULL," + " fee REAL      NOT NULL," 
+            String sql = "CREATE TABLE Property " + "(ID TEXT PRIMARY KEY	NOT NULL," + " type TEXT     NOT NULL," + "Bedrooms INT     NOT NULL," 
+            + "Bathrooms INT  NOT NULL," + "Furnished BOOLEAN   NOT NULL,"+ " Address TEXT     NOT NULL,"+ " State TEXT     NOT NULL," + "Fee INT     NOT NULL," 
             + " feePeriodStart TEXT		NOT NULL," + " feePeriodEnd TEXT		NOT NULL," + " landlordName TEXT		NOT NULL," +" landlordEmail TEXT	NOT NULL);";
             stmt.executeUpdate(sql);
             stmt.close();
@@ -62,7 +43,7 @@ public class CreateDatabase {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Table created successfully");
+        System.out.println("Property Table created successfully");
     }
 
     
@@ -70,7 +51,7 @@ public class CreateDatabase {
         java.sql.Statement stmt = null;
         try{
             stmt = c.createStatement();
-            String sql = "CREATE TABLE User " + "(ID INT PRIMARY KEY	NOT NULL," + " type TEXT     NOT NULL," + " userName TEXT    NOT NULL," + 
+            String sql = "CREATE TABLE User " + "(ID TEXT PRIMARY KEY	NOT NULL," + " type TEXT     NOT NULL," + " userName TEXT    NOT NULL," + 
             " firstName TEXT    NOT NULL," + " lastName TEXT      NOT NULL," + " email TEXT    NOT NULL," + " password TEXT		NOT NULL);";
             stmt.executeUpdate(sql);
             stmt.close();
@@ -78,10 +59,10 @@ public class CreateDatabase {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Table created successfully");
+        System.out.println("User Table created successfully");
     }
 
     public static void main(String[] args){
-        CreateProjectDatabase();
+        createProjectDatabase();
     }
 }
