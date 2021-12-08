@@ -1,42 +1,59 @@
 package Users;
 
 public class RegisteredRenter extends Renter{
-    private String name;
+    private String userName;
+    private String fname;
+    private String usertype = "Registered";
+    private String lname;
+    private String email;
+    private String password;
 
-
-    public RegisteredRenter() {
-        super();
-        name = "";
+    public String getUserName() {
+        return this.userName;
     }
 
-    public RegisteredRenter(String name) {
-        super();
-        this.name = name;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getUsertype(){
-        return super.usertype;
+    public String getFname() {
+        return this.fname;
     }
 
-    public RegisteredRenter(String name, String sc) {
-        super(sc);
-        this.name = name;
+    public void setFname(String fname) {
+        this.fname = fname;
     }
 
-    public String getName() {
-        return this.name;
+    public String getUsertype() {
+        return this.usertype;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsertype(String usertype) {
+        this.usertype = usertype;
     }
 
-    public String getSearchCriteria() {
-        return super.searchCriteria;
+    public String getLname() {
+        return this.lname;
     }
 
-    public void setSearchCriteria(String searchCriteria) {
-        super.searchCriteria = searchCriteria;
+    public void setLname(String lname) {
+        this.lname = lname;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }
