@@ -1,5 +1,11 @@
 package PRMS;
 
+/**
+ *
+ * @author Brian Chen <a
+ * href="mailto: brian.chen@ucalgary.ca">brian.chen@ucalgary.ca</a>
+ */
+
 public class Account {
     private String usernamel
 	private String password;
