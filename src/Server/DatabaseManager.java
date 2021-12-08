@@ -65,7 +65,7 @@ public class DatabaseManager{
     			conn.close();
     			return true;
     		}
-    		conn.close();
+    		//conn.close();
     	} catch(SQLException | ClassNotFoundException e) {
     		e.printStackTrace();
     	}
@@ -87,7 +87,7 @@ public class DatabaseManager{
     			conn.close();
     			return true;
     		}
-    		conn.close();
+    		//conn.close();
     	} catch(SQLException | ClassNotFoundException e) {
     		e.printStackTrace();
     	}
@@ -110,7 +110,7 @@ public class DatabaseManager{
     			conn.close();
     			return p;
     		}
-    		conn.close();
+    		//conn.close();
     	} catch(SQLException | ClassNotFoundException e) {
     		e.printStackTrace();
     	}
@@ -137,7 +137,7 @@ public class DatabaseManager{
         		conn.close();
         		return temp;
         	}
-        	conn.close();
+        	//conn.close();
         } catch(SQLException | ClassNotFoundException e) {
         	e.printStackTrace();
         }
@@ -169,7 +169,7 @@ public class DatabaseManager{
         		conn.close();
         		return temp;
         	}
-        	conn.close();
+        	//conn.close();
         } catch(SQLException | ClassNotFoundException e) {
         	e.printStackTrace();
         }
@@ -191,14 +191,12 @@ public class DatabaseManager{
         			Property p = new Property(rs.getString(1),rs.getString(2),rs.getInt(3),
 					rs.getInt(4),rs.getBoolean(5),rs.getString(6),rs.getString(7),rs.getInt(8),
 					rs.getString(9),rs.getString(10),rs.getString(11),rs.getString(12));
-					//conn.close();
         			temp.add(p);
-					//System.out.println("get all landlord properties");
         		}
         		conn.close();
         		return temp;
         	}
-        	conn.close();
+        	//conn.close();
         } catch(SQLException | ClassNotFoundException e) {
         	e.printStackTrace();
         }
@@ -236,7 +234,7 @@ public class DatabaseManager{
     		conn = getConn();
     		if(conn != null) {
     			addUser = conn.prepareStatement(addUserString);
-    			addUser.setInt(1, m.get());
+    			addUser.setString(1, m.getName());
     			
     			addUser.executeUpdate();
     			System.out.println("Added User");
