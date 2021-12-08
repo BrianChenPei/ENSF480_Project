@@ -7,21 +7,40 @@ package Property;
  */
 
 public class Property {
-    protected String id;
-    protected String listingState;
+    protected String id; //1
+    private String type; //2
+    
+    private int bedroom; //3
+    private int bathroom; //4
+    private boolean furnished; //5
+    private String address; //6
+    protected String listingState; //7
 
-    private String type;
-    private int bedroom;
-    private int bathroom; 
-    private boolean furnished;
-    private String location;
+    private int fee; //8
+    private String feePeriodStart; //9
+    private String feePeriodEnd; //10
     
-    private int fee;
-    private String feePeriodStart;
-    private String feePeriodEnd;
+    private String landlordName; //11
+    private String landlordEmail; //12
+
+    public Property(String id, String type,
+    int bed, int bath, boolean furn, String add, String ls, int fee,
+    String feeStart, String feeEnd, String Lln, String Lle){
+
+        this.id = id;
+        this.listingState = ls;
+        this.address = add;
+        this.type = type;
+        this.bedroom = bed;
+        this.bathroom = bath;
+        this.furnished = furn;
+        this.fee = fee;
+        this.feePeriodStart = feeStart;
+        this.feePeriodEnd = feeEnd;
+        this.landlordName = Lln;
+        this.landlordEmail = Lle;
+    }
     
-    private String landlordName;
-    private String landlordEmail;
     
     public void setID(String ID) {
         this.id = ID;
@@ -47,8 +66,8 @@ public class Property {
         this.furnished = furnish;
     }
     
-    public void setLocation(String location) {
-        this.location = location;
+    public void setAddress(String location) {
+        this.address = location;
     }
     
     public void setFee(int fee) {
@@ -95,8 +114,8 @@ public class Property {
         return this.furnished;
     }
 
-    public String getLocation() {
-        return this.location;
+    public String getAddress() {
+        return this.address;
     }
     
     public int getFee() {
