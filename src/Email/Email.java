@@ -10,6 +10,11 @@ public class Email {
     private String message;
 	private String emailAddress;
 	
+	public Email(String message, String emailAddress) {
+		this.message = message;
+		this.emailAddress = emailAddress;
+	}
+	
 	public void setMessage(String message) {
 		this.message = message;
 	}

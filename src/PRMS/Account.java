@@ -7,9 +7,15 @@ package PRMS;
  */
 
 public class Account {
-    private String usernamel
+    private String username;
 	private String password;
 	private String userType;
+	
+	public Account(String username, String password, String userType) {
+		this.username = username;
+		this.password = password;
+		this.userType = userType;
+	}
 	
 	public void setUsername(String username) {
 		this.username = username;
