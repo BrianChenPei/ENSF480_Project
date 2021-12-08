@@ -191,8 +191,9 @@ public class DatabaseManager{
         			Property p = new Property(rs.getString(1),rs.getString(2),rs.getInt(3),
 					rs.getInt(4),rs.getBoolean(5),rs.getString(6),rs.getString(7),rs.getInt(8),
 					rs.getString(9),rs.getString(10),rs.getString(11),rs.getString(12));
-					conn.close();
+					//conn.close();
         			temp.add(p);
+					//System.out.println("get all landlord properties");
         		}
         		conn.close();
         		return temp;
@@ -298,8 +299,14 @@ public class DatabaseManager{
     }
 	public static void main(String[] args) {
 		DatabaseManager db = new DatabaseManager();
-		Property Ahouse = new Property("10022", "Attached House", 2, 2, true, null, "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
-		//Property apartment = new Property("1004", "Apartment", 2, 1, false, "123 road", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
-		db.addProperty(Ahouse);
+		// Property Ahouse = new Property("10022", "Attached House", 2, 2, true, null, "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
+		// //Property apartment = new Property("1004", "Apartment", 2, 1, false, "123 road", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
+		// db.addProperty(Ahouse);
+
+		ArrayList<Property> disp =  db.getLandlordProperties("Mike");
+		for (Property i : disp){
+			System.out.println(i.getID());
+		}
+		
 	}
 }
