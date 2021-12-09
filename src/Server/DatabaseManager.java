@@ -65,7 +65,7 @@ public class DatabaseManager{
     			conn.close();
     			return true;
     		}
-    		conn.close();
+    		//conn.close();
     	} catch(SQLException | ClassNotFoundException e) {
     		e.printStackTrace();
     	}
@@ -87,7 +87,7 @@ public class DatabaseManager{
     			conn.close();
     			return true;
     		}
-    		conn.close();
+    		//conn.close();
     	} catch(SQLException | ClassNotFoundException e) {
     		e.printStackTrace();
     	}
@@ -110,7 +110,7 @@ public class DatabaseManager{
     			conn.close();
     			return p;
     		}
-    		conn.close();
+    		//conn.close();
     	} catch(SQLException | ClassNotFoundException e) {
     		e.printStackTrace();
     	}
@@ -137,7 +137,7 @@ public class DatabaseManager{
         		conn.close();
         		return temp;
         	}
-        	conn.close();
+        	//conn.close();
         } catch(SQLException | ClassNotFoundException e) {
         	e.printStackTrace();
         }
@@ -169,7 +169,7 @@ public class DatabaseManager{
         		conn.close();
         		return temp;
         	}
-        	conn.close();
+        	//conn.close();
         } catch(SQLException | ClassNotFoundException e) {
         	e.printStackTrace();
         }
@@ -191,13 +191,12 @@ public class DatabaseManager{
         			Property p = new Property(rs.getString(1),rs.getString(2),rs.getInt(3),
 					rs.getInt(4),rs.getBoolean(5),rs.getString(6),rs.getString(7),rs.getInt(8),
 					rs.getString(9),rs.getString(10),rs.getString(11),rs.getString(12));
-					conn.close();
         			temp.add(p);
         		}
         		conn.close();
         		return temp;
         	}
-        	conn.close();
+        	//conn.close();
         } catch(SQLException | ClassNotFoundException e) {
         	e.printStackTrace();
         }
@@ -208,17 +207,21 @@ public class DatabaseManager{
     	boolean success = true;
     	Connection conn = null;
     	PreparedStatement addUser = null;
-    	String addUserString = "INSERT INTO User values (?, ?, ?, ? ,? ,?, ?)";
+    	String addUserString = "INSERT INTO User values (?, ?, ?, ? ,? ,?)";
     	try {
     		conn = getConn();
     		if(conn != null) {
     			addUser = conn.prepareStatement(addUserString);
-    			addUser.setString(1, l.getName());
-    			
+    			addUser.setString(1, l.getUserName());
+				addUser.setString(2, l.getUsertype());
+				addUser.setString(3, l.getFname());
+				addUser.setString(4, l.getLname());
+				addUser.setString(5, l.getEmail());
+				addUser.setString(6, l.getPassword());    			
     			addUser.executeUpdate();
-    			System.out.println("Added User");
+    			System.out.println("Added Lanlord");
     		}
-    		conn.close();
+    		//conn.close();
     	} catch(ClassNotFoundException | SQLException e) {
     		e.printStackTrace();
     		return false;
@@ -226,29 +229,197 @@ public class DatabaseManager{
     	return success;
     }
 
+	public boolean removeLandlord(Landlord R){
+    	Connection conn = null;
+    	PreparedStatement deleteUser = null;
+    	String deleteUserString = "DELETE FROM User WHERE userName = ? AND type = ?";
+    	try {
+    		conn = getConn();
+    		if(conn != null) {
+    			deleteUser = conn.prepareStatement(deleteUserString);
+    			deleteUser.setString(1, R.getUserName());
+				deleteUser.setString(2, "Landlord");
+    			deleteUser.executeUpdate();
+    			conn.close();
+				System.out.println("Removed Landlord");
+    			return true;
+    		}
+    		//conn.close();
+    	} catch(ClassNotFoundException | SQLException e) {
+    		e.printStackTrace();
+    	}
+    	return false;
+    }
+
+	public Landlord getLandlord(String username) {
+    	Connection conn = null;
+    	PreparedStatement getUser = null;
+    	String getUserString = "SELECT * FROM User WHERE userName = ? AND type = ?";
+    	try {
+    		conn = getConn();
+    		if(conn != null) {
+    			getUser = conn.prepareStatement(getUserString);
+    			getUser.setString(1, username);
+				getUser.setString(2, "Landlord");
+    			ResultSet rs = getUser.executeQuery();
+    			Landlord u = new Landlord(rs.getString(1), rs.getString(2),
+				rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
+    			conn.close();
+				System.out.println("got Landlord");
+    			return u;
+    		}
+    		//conn.close();
+    	} catch(ClassNotFoundException | SQLException e){
+    		e.printStackTrace();
+    	}
+    	return null;
+    }
+
 	public boolean addManager(Manager m){
     	boolean success = true;
     	Connection conn = null;
     	PreparedStatement addUser = null;
-    	String addUserString = "INSERT INTO User values (?, ?, ?, ? ,? ,?, ?)";
+    	String addUserString = "INSERT INTO User values (?, ?, ?, ? ,? ,?)";
     	try {
     		conn = getConn();
     		if(conn != null) {
     			addUser = conn.prepareStatement(addUserString);
-    			addUser.setInt(1, m.get());
+    			addUser.setString(1, m.getUserName());
+				addUser.setString(2, m.getUsertype());
+				addUser.setString(3, m.getFname());
+				addUser.setString(4, m.getLname());
+				addUser.setString(5, m.getEmail());
+				addUser.setString(6, m.getPassword());  
     			
     			addUser.executeUpdate();
-    			System.out.println("Added User");
+    			System.out.println("Added Manager");
     		}
-    		conn.close();
+    		//conn.close();
     	} catch(ClassNotFoundException | SQLException e) {
     		e.printStackTrace();
     		return false;
     	}
     	return success;
     }
+
+	public boolean removeManager(Manager R){
+    	Connection conn = null;
+    	PreparedStatement deleteUser = null;
+    	String deleteUserString = "DELETE FROM User WHERE userName = ? AND type = ?";
+    	try {
+    		conn = getConn();
+    		if(conn != null) {
+    			deleteUser = conn.prepareStatement(deleteUserString);
+    			deleteUser.setString(1, R.getUserName());
+				deleteUser.setString(2, "Manager");
+    			deleteUser.executeUpdate();
+    			conn.close();
+				System.out.println("Removed Manager");
+    			return true;
+    		}
+    		//conn.close();
+    	} catch(ClassNotFoundException | SQLException e) {
+    		e.printStackTrace();
+    	}
+    	return false;
+    }
+
+	public Manager getManager(String username) {
+    	Connection conn = null;
+    	PreparedStatement getUser = null;
+    	String getUserString = "SELECT * FROM User WHERE userName = ? AND type = ?";
+    	try {
+    		conn = getConn();
+    		if(conn != null) {
+    			getUser = conn.prepareStatement(getUserString);
+    			getUser.setString(1, username);
+				getUser.setString(2, "Manager");
+    			ResultSet rs = getUser.executeQuery();
+    			Manager u = new Manager(rs.getString(1), rs.getString(2),
+				rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
+    			conn.close();
+				System.out.println("got Manager");
+    			return u;
+    		}
+    		//conn.close();
+    	} catch(ClassNotFoundException | SQLException e){
+    		e.printStackTrace();
+    	}
+    	return null;
+    }
+
+	public boolean addRegRenter(RegisteredRenter r){
+    	boolean success = true;
+    	Connection conn = null;
+    	PreparedStatement addUser = null;
+    	String addUserString = "INSERT INTO User values (?, ?, ?, ? ,? ,?)";
+    	try {
+    		conn = getConn();
+    		if(conn != null) {
+    			addUser = conn.prepareStatement(addUserString);
+    			addUser.setString(1, r.getUserName());
+				addUser.setString(2, r.getUsertype());
+				addUser.setString(3, r.getFname());
+				addUser.setString(4, r.getLname());
+				addUser.setString(5, r.getEmail());
+				addUser.setString(6, r.getPassword());  
+    			
+    			addUser.executeUpdate();
+    			System.out.println("Added Registered Renter");
+    		}
+    		//conn.close();
+    	} catch(ClassNotFoundException | SQLException e) {
+    		e.printStackTrace();
+    		return false;
+    	}
+    	return success;
+    }
+
+	public boolean removeRegRenter(RegisteredRenter R){
+    	Connection conn = null;
+    	PreparedStatement deleteUser = null;
+    	String deleteUserString = "DELETE FROM User WHERE userName = ?";
+    	try {
+    		conn = getConn();
+    		if(conn != null) {
+    			deleteUser = conn.prepareStatement(deleteUserString);
+    			deleteUser.setString(1, R.getUserName());
+    			deleteUser.executeUpdate();
+    			conn.close();
+				System.out.println("Removed Registered Renter");
+    			return true;
+    		}
+    		//conn.close();
+    	} catch(ClassNotFoundException | SQLException e) {
+    		e.printStackTrace();
+    	}
+    	return false;
+    }
+
+	public RegisteredRenter getRegRenter(String username) {
+    	Connection conn = null;
+    	PreparedStatement getUser = null;
+    	String getUserString = "SELECT * from User WHERE userName = ?";
+    	try {
+    		conn = getConn();
+    		if(conn != null) {
+    			getUser = conn.prepareStatement(getUserString);
+    			getUser.setString(1, username);
+    			ResultSet rs = getUser.executeQuery();
+    			RegisteredRenter u = new RegisteredRenter(rs.getString(1), rs.getString(2),
+				rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
+    			conn.close();
+				System.out.println("got Registered Renter");
+    			return u;
+    		}
+    		//conn.close();
+    	} catch(ClassNotFoundException | SQLException e){
+    		e.printStackTrace();
+    	}
+    	return null;
+    }
     
-    public Report getReport(String start, String end) {
+	public Report getReport(String start, String end) {
     	Connection conn = null;
     	PreparedStatement getReport = null;
     	String getListedString = "SELECT COUNT(*) AS NumberOfListed FROM Property WHERE \r\n" + 
@@ -280,26 +451,39 @@ public class DatabaseManager{
     			getReport.setString(2, end);
     			ResultSet rs3 = getReport.executeQuery();
     			while(rs3.next()) {
-        			Property p = new Property(rs.getString(1),rs.getString(2),rs.getInt(3),
-					rs.getInt(4),rs.getBoolean(5),rs.getString(6),rs.getString(7),rs.getInt(8),
-					rs.getString(9),rs.getString(10),rs.getString(11),rs.getString(12));
-					conn.close();
+        			Property p = new Property(rs3.getString(1),rs3.getString(2),rs3.getInt(3),
+					rs3.getInt(4),rs3.getBoolean(5),rs3.getString(6),rs3.getString(7),rs3.getInt(8),
+					rs3.getString(9),rs3.getString(10),rs3.getString(11),rs3.getString(12));
         			temp.add(p);
     			}
-    			Report summaryReport = new Report();
-    			conn.close();
-    			return summaryReport;
+    			Report Report = new Report();////////
+    			//conn.close();
+    			return Report;
     		}
-    		conn.close();
-    	} catch(SQLException | ClassNotFoundException e) {
+    		//conn.close();
+    	} catch(ClassNotFoundException | SQLException e) {
     		e.printStackTrace();
     	}
     	return null;
     }
+
 	public static void main(String[] args) {
 		DatabaseManager db = new DatabaseManager();
-		Property Ahouse = new Property("10022", "Attached House", 2, 2, true, null, "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
-		//Property apartment = new Property("1004", "Apartment", 2, 1, false, "123 road", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
-		db.addProperty(Ahouse);
+		// Property Ahouse = new Property("1002", "Attached House", 2, 2, true, "null", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
+		Property apartment = new Property("1004", "Apartment", 2, 1, false, "123 road", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
+		// db.addProperty(Ahouse);
+		db.addProperty(apartment);
+		Manager  m = new Manager("acaicedo", "Manager", "Andres", "Caicedo", "acaicedo@ucalgary.ca", "password");
+		db.addManager(m);
+		RegisteredRenter  r = new RegisteredRenter("kaitlin12", "Registered Renter", "Kaitlin", "Culligan", "kcull@ucalgary.ca", "password");
+		db.removeRegRenter(r);
+		Landlord  d = new Landlord("zheng123", "Landlord", "Zheng", "Chen", "zchen@ucalgary.ca", "password");
+		db.removeLandlord(d);
+
+		ArrayList<Property> disp =  db.getLandlordProperties("Mike");
+		for (Property i : disp){
+			System.out.println(i.getID());
+		}
+		
 	}
 }
