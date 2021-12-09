@@ -26,6 +26,7 @@ import Users.*;
  */
 
 public class GUI extends JFrame{
+    //frame components
     private JFrame frame;
     private JMenuBar menu;
     private JPanel loginPanel;
@@ -38,24 +39,37 @@ public class GUI extends JFrame{
     private JPanel previousPanel;
     private JPanel listPanel;
     private JPanel registerPanel;
+    private JPanel modifyPanel;
+    private JPanel userInfoPanel;
+
+    //control variables
+    PRMS prms;
+    User user;
+    Renter renter;
+    RegisteredRenter registeredRenter;
+    Landlord landlord;
+    Manager manager;
     boolean loggedIn = false;
     boolean notifications = true;
 
+    /**
+     * Constructor
+     */
     public GUI(){
         Login.getOnlyInstance();
         createLoginPanel();
         createSearchPanel();
-        createPropertyPanel();
         createLandlordPanel();
         createManagerPanel();
         createNotificationPanel();
         createFrame();
     }
 
-    public void display(){
-
-    }
-
+    /**
+     * logins in user
+     * @param username username used
+     * @param password password used
+     */
     public void login(String username, String password){
          loggedIn = Login.getOnlyInstance().login(username, password);
          if(loggedIn){
@@ -64,6 +78,9 @@ public class GUI extends JFrame{
          }
     }
 
+    /**
+     * logs out logged in user
+     */
     public void logout(){
         loggedIn = false;
         createManagerPanel();
@@ -71,6 +88,9 @@ public class GUI extends JFrame{
         updateMenuBar();
    }
 
+   /**
+    * used for frame initialization and intial panel creation
+    */
     private void createFrame(){
         frame = new JFrame("Property Rental Management System");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -82,6 +102,9 @@ public class GUI extends JFrame{
         frame.setVisible(true);
     }
 
+    /**
+     * sets up the login panel
+     */
     private void createLoginPanel(){
         loginPanel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -134,6 +157,9 @@ public class GUI extends JFrame{
         loginPanel.add(enterButton,c);
     }
 
+    /**
+     * sets up the search panel
+     */
     private void createSearchPanel(){
         searchPanel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -186,8 +212,10 @@ public class GUI extends JFrame{
         searchButton.addActionListener(
             new ActionListener(){
                 public void actionPerformed(ActionEvent evt){
-                //search with PRMS
+                String searchCriteria = typeField.getText(); //have to append a string together
+                ArrayList<Property> results = prms.searchProperty(searchCriteria);
                 //update propertyPanel
+                createPropertyPanel(results);
                  frame.setContentPane(propertyPanel);
                  frame.validate();
             }
@@ -196,12 +224,32 @@ public class GUI extends JFrame{
         searchPanel.add(searchButton,c);
     }
 
-    private void createPropertyPanel(){
+    /**
+     * sets up the property search results panel
+     */
+    private void createPropertyPanel(ArrayList<Property> results){
         propertyPanel = new JPanel(new BorderLayout());
         ArrayList<String> lists = new ArrayList<>(15);
         //make Strings out of query results
         for(int i = 0; i < 15; i++){
-            lists.add("TESTTESTTESTESTESTESTESTESTESTESTESTESTESTESTEST"+String.valueOf(i));
+            String p = results.get(i).getType();
+            p +='/';
+            p+=  results.get(i).getAddress();
+            p +='/';
+            p+=  results.get(i).getBedRoom() + "bedrooms";
+            p +='/';
+            p+=  results.get(i).getBathroom() + "bathrooms";
+            if(results.get(i).getFurnish()){
+                p +='/';
+                p+=  "Furnished";
+            }
+            else{
+                p +='/';
+                p+=  "Not Furnished";
+            }
+            p +='/';
+            p+=  results.get(i).getLocation();
+            lists.add(p);
         }
         JScrollPane scroll = new JScrollPane();
         JList<String> list = new JList<String>(lists.toArray(new String[lists.size()]));
@@ -219,6 +267,10 @@ public class GUI extends JFrame{
         propertyPanel.add("Center", scroll);
     }
 
+    /**
+     *  sets up the email panel
+     * @param s address of property being emailed about
+     */
     private void createEmailPanel(String s){
         emailPanel = new JPanel(new BorderLayout());
         emailPanel.add("North", new JLabel("Send email to landlord of: "+s));
@@ -250,6 +302,9 @@ public class GUI extends JFrame{
         
     }
 
+    /**
+     * sets up the landlord menu
+     */
     private void createLandlordPanel(){
         if(loggedIn){
             landlordPanel = new JPanel(new BorderLayout());
@@ -268,23 +323,9 @@ public class GUI extends JFrame{
             modify.addActionListener(
                 new ActionListener(){
                     public void actionPerformed(ActionEvent evt){
-                        ArrayList<String> lists = new ArrayList<>(15);
-                        //make Strings out of query results
-                        for(int i = 0; i < 15; i++){
-                            lists.add("TESTTESTTESTESTESTESTESTESTESTESTESTESTESTESTEST"+String.valueOf(i));
-                        }
-                        JScrollPane scroll = new JScrollPane();
-                        JList<String> list = new JList<String>(lists.toArray(new String[lists.size()]));
-                        list.addListSelectionListener(new ListSelectionListener(){
-                            public void valueChanged(ListSelectionEvent e){
-                                String state = JOptionPane.showInputDialog(null, "Please enter the new listing state");
-                                //update PRMS
-                            }
-                        });
-                        scroll.setViewportView(list);
-                        list.setLayoutOrientation(JList.VERTICAL);
-                        scroll.createVerticalScrollBar();
-                        managerPanel.add("Center", scroll);
+                        createModifyPanel();
+                        frame.setContentPane(modifyPanel);
+                        frame.validate();
                     }
                 }
             );
@@ -299,6 +340,9 @@ public class GUI extends JFrame{
         }
     }
 
+    /**
+     * sets up the manager menu
+     */
     private void createManagerPanel(){
         //create menu bar for buttons
         
@@ -324,7 +368,8 @@ public class GUI extends JFrame{
                     public void actionPerformed(ActionEvent evt){
                         int amount = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter the new amount in dollars:"));
                         int time = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter the new time in days:"));
-                        //update prms
+                        prms.changeFee(amount);
+                        prms.changeFeePeriod(time);
                     }
                 }
             );
@@ -332,22 +377,9 @@ public class GUI extends JFrame{
             userInfo.addActionListener(
                 new ActionListener(){
                     public void actionPerformed(ActionEvent evt){
-                        ArrayList<String> lists = new ArrayList<>(15);
-                        //make Strings out of query results
-                        for(int i = 0; i < 15; i++){
-                            lists.add("TESTTESTTESTESTESTESTESTESTESTESTESTESTESTESTEST"+String.valueOf(i));
-                        }
-                        JScrollPane scroll = new JScrollPane();
-                        JList<String> list = new JList<String>(lists.toArray(new String[lists.size()]));
-                        list.addListSelectionListener(new ListSelectionListener(){
-                            public void valueChanged(ListSelectionEvent e){
-                                //editing popup?
-                            }
-                        });
-                        scroll.setViewportView(list);
-                        list.setLayoutOrientation(JList.VERTICAL);
-                        scroll.createVerticalScrollBar();
-                        managerPanel.add("Center", scroll);
+                        createUserInfoPanel();
+                        frame.setContentPane(userInfoPanel);
+                        frame.validate();
                     }
                 }
             );
@@ -355,23 +387,9 @@ public class GUI extends JFrame{
             properties.addActionListener(
                 new ActionListener(){
                     public void actionPerformed(ActionEvent evt){
-                        ArrayList<String> lists = new ArrayList<>(15);
-                        //make Strings out of query results
-                        for(int i = 0; i < 15; i++){
-                            lists.add("TESTTESTTESTESTESTESTESTESTESTESTESTESTESTESTEST"+String.valueOf(i));
-                        }
-                        JScrollPane scroll = new JScrollPane();
-                        JList<String> list = new JList<String>(lists.toArray(new String[lists.size()]));
-                        list.addListSelectionListener(new ListSelectionListener(){
-                            public void valueChanged(ListSelectionEvent e){
-                                String state = JOptionPane.showInputDialog(null, "Please enter the new listing state");
-                                //update PRMS
-                            }
-                        });
-                        scroll.setViewportView(list);
-                        list.setLayoutOrientation(JList.VERTICAL);
-                        scroll.createVerticalScrollBar();
-                        managerPanel.add("Center", scroll);
+                        createModifyPanel();
+                        frame.setContentPane(modifyPanel);
+                        frame.validate();
                     }
                 }
             );
@@ -387,6 +405,9 @@ public class GUI extends JFrame{
         }
     }
 
+    /**
+     * sets up the notification page for registered renters
+     */
     private void createNotificationPanel(){
         notificationPanel = new JPanel(new BorderLayout());
         ArrayList<String> lists = new ArrayList<>(15);
@@ -427,6 +448,9 @@ public class GUI extends JFrame{
         notificationPanel.add("South", optOutButton);
     }
 
+    /**
+     * sets up the listing page for landlords
+     */
     private void createListPanel(){
         listPanel = new JPanel();
         GridBagConstraints c = new GridBagConstraints();
@@ -506,6 +530,9 @@ public class GUI extends JFrame{
         listPanel.add(backButton,c);
     }
 
+    /**
+     * sets up the new user register page
+     */
     private void createRegisterPanel(){
         registerPanel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -545,6 +572,58 @@ public class GUI extends JFrame{
         registerPanel.add(enterButton,c);
 }
     
+    /**
+     * sets up the modify existing listing panel for landlords and managers
+     */
+    private void createModifyPanel(){
+        modifyPanel = new JPanel(new BorderLayout());
+
+        ArrayList<String> lists = new ArrayList<>(15);
+        //make Strings out of query results
+        for(int i = 0; i < 15; i++){
+            lists.add("TESTTESTTESTESTESTESTESTESTESTESTESTESTESTESTEST"+String.valueOf(i));
+        }
+        JScrollPane scroll = new JScrollPane();
+        JList<String> list = new JList<String>(lists.toArray(new String[lists.size()]));
+        list.addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent e){
+                String state = JOptionPane.showInputDialog(null, "Please enter the new listing state");
+                //update PRMS
+            }
+        });
+        scroll.setViewportView(list);
+        list.setLayoutOrientation(JList.VERTICAL);
+        scroll.createVerticalScrollBar();
+        modifyPanel.add("Center", scroll);
+    }
+
+    /**
+     * sets up the user info page for managers
+     */
+    private void createUserInfoPanel(){
+       userInfoPanel = new JPanel(new BorderLayout());
+
+        ArrayList<String> lists = new ArrayList<>(15);
+        //make Strings out of query results
+        for(int i = 0; i < 15; i++){
+            lists.add("TESTTESTTESTESTESTESTESTESTESTESTESTESTESTESTEST"+String.valueOf(i));
+        }
+        JScrollPane scroll = new JScrollPane();
+        JList<String> list = new JList<String>(lists.toArray(new String[lists.size()]));
+        list.addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent e){
+                //stuff here
+            }
+        });
+        scroll.setViewportView(list);
+        list.setLayoutOrientation(JList.VERTICAL);
+        scroll.createVerticalScrollBar();
+        userInfoPanel.add("Center", scroll);
+    }
+
+    /**
+     * updates the menu bar according to logged in status
+     */
     private void updateMenuBar(){
         if(!loggedIn){
             JMenuItem register = new JMenuItem("Register");
@@ -579,6 +658,9 @@ public class GUI extends JFrame{
         }
     }
 
+    /**
+     * creates the menu bar
+     */
     private void createMenuBar(){
         JMenuItem register = new JMenuItem("Register");
         JMenuItem log = new JMenuItem("Login");
