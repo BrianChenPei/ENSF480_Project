@@ -3,7 +3,7 @@ package Users;
 public class RegisteredRenter extends Renter{
     private String userName;
     private String fname;
-    private String usertype = "Registered";
+    private String usertype;
     private String lname;
     private String email;
     private String password;

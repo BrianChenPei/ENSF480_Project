@@ -6,7 +6,7 @@ import PRMS.Report;
 public class Manager implements User{
     private String userName;
     private String fname;
-    private String usertype = "Manager";
+    private String usertype;
     private String lname;
     private String email;
     private String password;

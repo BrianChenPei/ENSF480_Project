@@ -213,13 +213,13 @@ public class DatabaseManager{
     		if(conn != null) {
     			addUser = conn.prepareStatement(addUserString);
     			addUser.setString(1, l.getUserName());
-				addUser.setString(1, l.getUsertype());
-				addUser.setString(1, l.getFname());
-				addUser.setString(1, l.getLname());
-				addUser.setString(1, l.getEmail());
-				addUser.setString(1, l.getPassword());    			
+				addUser.setString(2, l.getUsertype());
+				addUser.setString(3, l.getFname());
+				addUser.setString(4, l.getLname());
+				addUser.setString(5, l.getEmail());
+				addUser.setString(6, l.getPassword());    			
     			addUser.executeUpdate();
-    			System.out.println("Added User");
+    			System.out.println("Added Lanlord");
     		}
     		//conn.close();
     	} catch(ClassNotFoundException | SQLException e) {
@@ -241,6 +241,7 @@ public class DatabaseManager{
 				deleteUser.setString(2, "Landlord");
     			deleteUser.executeUpdate();
     			conn.close();
+				System.out.println("Removed Landlord");
     			return true;
     		}
     		//conn.close();
@@ -264,6 +265,7 @@ public class DatabaseManager{
     			Landlord u = new Landlord(rs.getString(1), rs.getString(2),
 				rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
     			conn.close();
+				System.out.println("got Landlord");
     			return u;
     		}
     		//conn.close();
@@ -283,14 +285,14 @@ public class DatabaseManager{
     		if(conn != null) {
     			addUser = conn.prepareStatement(addUserString);
     			addUser.setString(1, m.getUserName());
-				addUser.setString(1, m.getUsertype());
-				addUser.setString(1, m.getFname());
-				addUser.setString(1, m.getLname());
-				addUser.setString(1, m.getEmail());
-				addUser.setString(1, m.getPassword());  
+				addUser.setString(2, m.getUsertype());
+				addUser.setString(3, m.getFname());
+				addUser.setString(4, m.getLname());
+				addUser.setString(5, m.getEmail());
+				addUser.setString(6, m.getPassword());  
     			
     			addUser.executeUpdate();
-    			System.out.println("Added User");
+    			System.out.println("Added Manager");
     		}
     		//conn.close();
     	} catch(ClassNotFoundException | SQLException e) {
@@ -312,6 +314,7 @@ public class DatabaseManager{
 				deleteUser.setString(2, "Manager");
     			deleteUser.executeUpdate();
     			conn.close();
+				System.out.println("Removed Manager");
     			return true;
     		}
     		//conn.close();
@@ -335,6 +338,7 @@ public class DatabaseManager{
     			Manager u = new Manager(rs.getString(1), rs.getString(2),
 				rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
     			conn.close();
+				System.out.println("got Manager");
     			return u;
     		}
     		//conn.close();
@@ -354,14 +358,14 @@ public class DatabaseManager{
     		if(conn != null) {
     			addUser = conn.prepareStatement(addUserString);
     			addUser.setString(1, r.getUserName());
-				addUser.setString(1, r.getUsertype());
-				addUser.setString(1, r.getFname());
-				addUser.setString(1, r.getLname());
-				addUser.setString(1, r.getEmail());
-				addUser.setString(1, r.getPassword());  
+				addUser.setString(2, r.getUsertype());
+				addUser.setString(3, r.getFname());
+				addUser.setString(4, r.getLname());
+				addUser.setString(5, r.getEmail());
+				addUser.setString(6, r.getPassword());  
     			
     			addUser.executeUpdate();
-    			System.out.println("Added User");
+    			System.out.println("Added Registered Renter");
     		}
     		//conn.close();
     	} catch(ClassNotFoundException | SQLException e) {
@@ -382,6 +386,7 @@ public class DatabaseManager{
     			deleteUser.setString(1, R.getUserName());
     			deleteUser.executeUpdate();
     			conn.close();
+				System.out.println("Removed Registered Renter");
     			return true;
     		}
     		//conn.close();
@@ -404,6 +409,7 @@ public class DatabaseManager{
     			RegisteredRenter u = new RegisteredRenter(rs.getString(1), rs.getString(2),
 				rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
     			conn.close();
+				System.out.println("got Registered Renter");
     			return u;
     		}
     		//conn.close();
@@ -463,10 +469,16 @@ public class DatabaseManager{
 
 	public static void main(String[] args) {
 		DatabaseManager db = new DatabaseManager();
-		Property Ahouse = new Property("1002", "Attached House", 2, 2, true, "null", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
+		// Property Ahouse = new Property("1002", "Attached House", 2, 2, true, "null", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
 		Property apartment = new Property("1004", "Apartment", 2, 1, false, "123 road", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
-		db.addProperty(Ahouse);
-		db.addProperty(apartment);
+		// db.addProperty(Ahouse);
+		db.removeProperty(apartment);
+		Manager  m = new Manager("acaicedo", "Manager", "Andres", "Caicedo", "acaicedo@ucalgary.ca", "password");
+		db.removeManager(m);
+		RegisteredRenter  r = new RegisteredRenter("kaitlin12", "Registered Renter", "Kaitlin", "Culligan", "kcull@ucalgary.ca", "password");
+		db.addRegRenter(r);
+		Landlord  d = new Landlord("zheng123", "Landlord", "Zheng", "Chen", "zchen@ucalgary.ca", "password");
+		db.addLandlord(d);
 
 		ArrayList<Property> disp =  db.getLandlordProperties("Mike");
 		for (Property i : disp){
