@@ -30,16 +30,6 @@ public class PRMS {
         em.sendTo();
     }
 
-    public void subscribe(String searchCri){
-
-    }
-
-    public void unsubscribe(){
-        
-    }
-
-
-
     //Manger's controller function
     public String askReport(String start, String end){
         return db.getReport(start, end).Display();

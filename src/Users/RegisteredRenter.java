@@ -1,5 +1,8 @@
 package Users;
 
+import Server.*;
+import java.util.ArrayList;
+
 public class RegisteredRenter extends Renter{
     private String userName;
     private String fname;
@@ -7,7 +10,11 @@ public class RegisteredRenter extends Renter{
     private String lname;
     private String email;
     private String password;
-
+	
+	private Observer channel = new Observer();
+	
+	private DatabaseManager data = new DatabaseManager();
+	
     public RegisteredRenter(String userName, String type, String fname, String lname, String email, String password) {
         this.userName = userName;
         this.fname = fname;
@@ -64,5 +71,28 @@ public class RegisteredRenter extends Renter{
     public void setPassword(String password) {
         this.password = password;
     }
+	
+    public void update(String searchCriteria) {
+		for(Property p : data.getProperties(searchCriteria)) {
+			System.out.println(p);
+		}
+	}
+	
+	public void subscribeCriteria(Observer ch) {
+		channel = ch;
+	}
 
+/*
+	public static void main(String[] args){
+        RegisteredRenter r1 = new RegisteredRenter("bob1", "Registered Renter", "Bob", "Ross", "blah@gmail.com", "12345");
+		
+		Property p = new Property("fas", "sfd", 2, 3, false, "rw", "sdf", 3, "hgfh", "ytryr", "ghjg", "sdfg");
+		
+		ArrayList<Property> prop = new ArrayList<Property>();
+		
+		prop.add(p);
+
+		
+    }
+*/
 }
