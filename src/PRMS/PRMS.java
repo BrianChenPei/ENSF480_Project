@@ -78,7 +78,8 @@ public class PRMS {
 
 
     //Landlord's controller function
-    public void payFee(int houseID, int money){
+    public String payFee(int houseID, int money){
+        if(money<=0) return "Invalid Payment Amount";
         Property p = db.getProperty(houseID);
         if(p!=null){
             int earlyFee = p.getFee();
@@ -86,7 +87,9 @@ public class PRMS {
             if( db.getProperty(houseID).getFee() >= postingFee){
                 db.getProperty(houseID).setState("Active");
             }
+            return "Fee Payment Succeed";
         }
+        return "Invalid Property";
     }
 
     /*public static void main(String[] args){
