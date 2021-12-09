@@ -472,13 +472,13 @@ public class DatabaseManager{
 		// Property Ahouse = new Property("1002", "Attached House", 2, 2, true, "null", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
 		Property apartment = new Property("1004", "Apartment", 2, 1, false, "123 road", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
 		// db.addProperty(Ahouse);
-		db.removeProperty(apartment);
+		db.addProperty(apartment);
 		Manager  m = new Manager("acaicedo", "Manager", "Andres", "Caicedo", "acaicedo@ucalgary.ca", "password");
-		db.removeManager(m);
+		db.addManager(m);
 		RegisteredRenter  r = new RegisteredRenter("kaitlin12", "Registered Renter", "Kaitlin", "Culligan", "kcull@ucalgary.ca", "password");
-		db.addRegRenter(r);
+		db.removeRegRenter(r);
 		Landlord  d = new Landlord("zheng123", "Landlord", "Zheng", "Chen", "zchen@ucalgary.ca", "password");
-		db.addLandlord(d);
+		db.removeLandlord(d);
 
 		ArrayList<Property> disp =  db.getLandlordProperties("Mike");
 		for (Property i : disp){
