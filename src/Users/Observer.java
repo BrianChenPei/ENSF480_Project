@@ -1,5 +1,12 @@
 package Users;
 
+/**
+ *
+ * @author Brian Chen <a
+ * href="mailto: brian.chen@ucalgary.ca">brian.chen@ucalgary.ca</a>
+ */
+
+
 import java.util.List;
 
 /*
