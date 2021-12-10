@@ -42,6 +42,14 @@ public class Observer {
 		subs.add(sub);
     }
 
+	public boolean checkSubscribed(RegisteredRenter candidate) {
+		if(subs.contains(candidate)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	/**
 	 * unsubscribes registered renter from subs list
 	 * @param renter
