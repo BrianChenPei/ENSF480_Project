@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class RegisteredRenter implements User{
     private String userName;
     private String fname;
-    private String usertype;
+    private String usertype = "RegisteredRenter";
     private String lname;
     private String email;
     private String password;
