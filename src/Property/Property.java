@@ -13,7 +13,7 @@ public class Property {
     private int bedroom; //3
     private int bathroom; //4
     private boolean furnished; //5
-    private String address; //6
+    private String quadrant; //6
     protected String listingState; //7
 
     private int fee; //8
@@ -29,21 +29,20 @@ public class Property {
         this.bedroom = bed;
         this.bathroom = bath;
         this.furnished = furn;
-        this.address = add;
+        this.quadrant = add;
     }
 
     public Property(String id, String type,
-    int bed, int bath, boolean furn, String add, String ls, int fee,
+    int bed, int bath, boolean furn, String add, String ls,
     String feeStart, String feeEnd, String Lln, String Lle){
 
         this.id = id;
         this.listingState = ls;
-        this.address = add;
+        this.quadrant = add;
         this.type = type;
         this.bedroom = bed;
         this.bathroom = bath;
         this.furnished = furn;
-        this.fee = fee;
         this.feePeriodStart = feeStart;
         this.feePeriodEnd = feeEnd;
         this.landlordName = Lln;
@@ -75,8 +74,8 @@ public class Property {
         this.furnished = furnish;
     }
     
-    public void setAddress(String location) {
-        this.address = location;
+    public void setQuadrant(String location) {
+        this.quadrant = location;
     }
     
     public void setFee(int fee) {
@@ -123,8 +122,8 @@ public class Property {
         return this.furnished;
     }
 
-    public String getAddress() {
-        return this.address;
+    public String getQuadrant() {
+        return this.quadrant;
     }
     
     public int getFee() {

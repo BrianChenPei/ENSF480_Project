@@ -24,7 +24,7 @@ public class DatabaseManager{
     	boolean success = true;
     	Connection conn = null;
     	PreparedStatement addProperty = null;
-    	String addPropertyString = "INSERT INTO Property values (?, ?, ?, ? ,? ,?, ?, ?, ?, ?, ?, ?)";
+    	String addPropertyString = "INSERT INTO Property values (?, ?, ?, ? ,? ,?, ?, ?, ?, ?, ?)";
     	try {
     		conn = getConn();
     		if(conn != null) {
@@ -75,7 +75,7 @@ public class DatabaseManager{
     public boolean changeState(String newState, int ID) {
     	Connection conn = null;
     	PreparedStatement changeState = null;
-    	String changeStateString = "UPDATE Property SET listingState = ? WHERE ID = ?";
+    	String changeStateString = "UPDATE Property SET State = ? WHERE ID = ?";
     	try {
     		conn = getConn();
     		if(conn != null) {
@@ -83,6 +83,28 @@ public class DatabaseManager{
     			changeState.setString(1, newState);
     			changeState.setInt(2, ID);
     			changeState.executeUpdate();
+    			conn.close();
+    			return true;
+    		}
+    		//conn.close();
+    	} catch(SQLException | ClassNotFoundException e) {
+    		e.printStackTrace();
+    	}
+    	return false;
+    }
+
+	public boolean changePeriod(String newPS, String newPE, int ID) {
+    	Connection conn = null;
+    	PreparedStatement changePeriod = null;
+    	String changePeriodString = "UPDATE Property SET PeriodStart = ?, PeriodEnd = ? WHERE ID = ?";
+    	try {
+    		conn = getConn();
+    		if(conn != null) {
+    			changePeriod = conn.prepareStatement(changePeriodString);
+    			changePeriod.setString(1, newPS);
+				changePeriod.setString(2, newPE);
+    			changePeriod.setInt(3, ID);
+    			changePeriod.executeUpdate();
     			conn.close();
     			return true;
     		}
@@ -104,7 +126,7 @@ public class DatabaseManager{
     			getProperty.setInt(1, ID);
     			ResultSet rs = getProperty.executeQuery();
     			Property p = new Property(rs.getString(1),rs.getString(2),rs.getInt(3),
-				rs.getInt(4),rs.getBoolean(5),rs.getString(6),rs.getString(7), p.getFee(),
+				rs.getInt(4),rs.getBoolean(5),rs.getString(6),rs.getString(7),
 				rs.getString(8),rs.getString(9),rs.getString(10),rs.getString(11));
     			conn.close();
     			return p;
@@ -128,8 +150,8 @@ public class DatabaseManager{
         		ResultSet rs = getAllProperties.executeQuery();
         		while(rs.next()) {
         			Property p = new Property(rs.getString(1),rs.getString(2),rs.getInt(3),
-					rs.getInt(4),rs.getBoolean(5),rs.getString(6),rs.getString(7),rs.getInt(8),
-					rs.getString(9),rs.getString(10),rs.getString(11),rs.getString(12));
+					rs.getInt(4),rs.getBoolean(5),rs.getString(6),rs.getString(7),
+					rs.getString(8),rs.getString(9),rs.getString(10),rs.getString(11));
 					conn.close();
         			temp.add(p);
         		}
@@ -143,26 +165,26 @@ public class DatabaseManager{
         return null;
     }
     
-    public ArrayList<Property> getProperties(Property searchCriteria){
+    public ArrayList<Property> SearchProperties(Property search){
         Connection conn = null;
         PreparedStatement getProperties = null;
-        String getPropertiesString = "SELECT * from Property WHERE type = ? AND numOfBedrooms = ? AND numOfBathrooms = ? AND isFurnished = ? AND listingState = 'Active'";
+        String getPropertiesString = "SELECT * from Property WHERE type = ? AND Bedrooms = ? AND Bathrooms = ? AND Furnished = ? AND CityQuadrant = ? AND State = 'Available'";
         ArrayList<Property> temp = new ArrayList<Property>();
         try {
         	conn = getConn();
         	if(conn != null) {
         		getProperties = conn.prepareStatement(getPropertiesString);
-        		getProperties.setString(1, searchCriteria.getType());
-        		getProperties.setInt(2, searchCriteria.getBedRoom());
-        		getProperties.setInt(3, searchCriteria.getBathroom());
-        		getProperties.setBoolean(4, searchCriteria.getFurnish());
-        		getProperties.setString(5, searchCriteria.getState());
+        		getProperties.setString(1, search.getType());
+        		getProperties.setInt(2, search.getBedRoom());
+        		getProperties.setInt(3, search.getBathroom());
+        		getProperties.setBoolean(4, search.getFurnish());
+        		getProperties.setString(5, search.getQuadrant());
         		ResultSet rs = getProperties.executeQuery();
         		while(rs.next()) {
+					System.out.println("DEBUG");
         			Property p = new Property(rs.getString(1),rs.getString(2),rs.getInt(3),
-					rs.getInt(4),rs.getBoolean(5),rs.getString(6),rs.getString(7),rs.getInt(8),
-					rs.getString(9),rs.getString(10),rs.getString(11),rs.getString(12));
-					conn.close();
+					rs.getInt(4),rs.getBoolean(5),rs.getString(6),rs.getString(7),
+					rs.getString(8),rs.getString(9),rs.getString(10),rs.getString(11));
         			temp.add(p);
         		}
         		conn.close();
@@ -188,8 +210,8 @@ public class DatabaseManager{
         		ResultSet rs = getLandlordProperties.executeQuery();
         		while(rs.next()) {
         			Property p = new Property(rs.getString(1),rs.getString(2),rs.getInt(3),
-					rs.getInt(4),rs.getBoolean(5),rs.getString(6),rs.getString(7),rs.getInt(8),
-					rs.getString(9),rs.getString(10),rs.getString(11),rs.getString(12));
+					rs.getInt(4),rs.getBoolean(5),rs.getString(6),rs.getString(7),
+					rs.getString(8),rs.getString(9),rs.getString(10),rs.getString(11));
         			temp.add(p);
         		}
         		conn.close();
@@ -417,7 +439,33 @@ public class DatabaseManager{
     	}
     	return null;
     }
-    
+    	
+	public String checkAccount(String username){
+		Connection conn = null;
+    	PreparedStatement check = null;
+    	String checkUserString = "SELECT * FROM User WHERE userName = ?";
+		try{
+			conn = getConn();
+			if(conn != null){
+				check = conn.prepareStatement(checkUserString);
+				check.setString(1, username);
+				ResultSet rs = check.executeQuery();
+				if (rs.next() == false){
+					return "NE";
+				}
+				String account = rs.getString(2);
+				conn.close();
+				return account;
+			}
+
+		}catch(ClassNotFoundException | SQLException e) {
+    		e.printStackTrace();
+		}
+		
+		return "Connection failed";
+	}
+
+
 	public Report getReport(String start, String end) {
     	Connection conn = null;
     	PreparedStatement getReport = null;
@@ -451,8 +499,8 @@ public class DatabaseManager{
     			ResultSet rs3 = getReport.executeQuery();
     			while(rs3.next()) {
         			Property p = new Property(rs3.getString(1),rs3.getString(2),rs3.getInt(3),
-					rs3.getInt(4),rs3.getBoolean(5),rs3.getString(6),rs3.getString(7),rs3.getInt(8),
-					rs3.getString(9),rs3.getString(10),rs3.getString(11),rs3.getString(12));
+					rs3.getInt(4),rs3.getBoolean(5),rs3.getString(6),rs3.getString(7),
+					rs3.getString(8),rs3.getString(9),rs.getString(10),rs3.getString(11));
         			temp.add(p);
     			}
     			Report Report = new Report();////////NEED CTOR
@@ -468,21 +516,37 @@ public class DatabaseManager{
 
 	public static void main(String[] args) {
 		DatabaseManager db = new DatabaseManager();
-		Property Ahouse = new Property("10056", "Attached House", 2, 2, true, "NE", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
-		Property apartment = new Property("1004", "Apartment", 2, 1, false, "NW", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
-		db.addProperty(Ahouse);
-		db.addProperty(apartment);
-		Manager  m = new Manager("acaicedo", "Manager", "Andres", "Caicedo", "acaicedo@ucalgary.ca", "password");
-		db.addManager(m);
-		RegisteredRenter  r = new RegisteredRenter("kaitlin12", "Registered Renter", "Kaitlin", "Culligan", "kcull@ucalgary.ca", "password");
-		db.addRegRenter(r);
-		Landlord  d = new Landlord("zheng123", "Landlord", "Zheng", "Chen", "zchen@ucalgary.ca", "password");
-		db.addLandlord(d);
+		Property Ahouse = new Property("Attached House", 2, 2, true, "NE");
+		Property apartment = new Property("123", "Apartment", 2, 1, false, "NW", "Available", "november", "december", "Mike", "mike@ucalgary.ca");
+		// db.addProperty(Ahouse);
+		// db.addProperty(apartment);
+		// Manager  m = new Manager("acaicedo", "Manager", "Andres", "Caicedo", "acaicedo@ucalgary.ca", "password");
+		// db.addManager(m);
+		// RegisteredRenter  r = new RegisteredRenter("kaitlin12", "Registered Renter", "Kaitlin", "Culligan", "kcull@ucalgary.ca", "password");
+		// db.addRegRenter(r);
+		Landlord  d = new Landlord("king", "Landlord", "Zheng", "Chen", "zchen@ucalgary.ca", "password");
+		// db.addLandlord(d);
 
-		ArrayList<Property> disp =  db.getLandlordProperties("Mike");
-		for (Property i : disp){
-			System.out.println(i.getID());
+		ArrayList<Property> list = db.SearchProperties(Ahouse);
+
+		for (Property p : list){
+			System.out.println(p.getID());
 		}
+		// String type = db.checkAccount("none");
+
+		// if (type != "NE"){
+		// 	System.out.println("Account exist!: " + type);
+		// }
+		// else{
+		// 	System.out.println("Account does not exist");
+		// }
 		
-	}
+		// String typee = db.checkAccount("king");
+		// if (typee != "NE"){
+		// 	System.out.println("Account exist!: " + typee);
+		// }
+		// else{
+		// 	System.out.println("Account does not exist");
+		// }
+	}	
 }
