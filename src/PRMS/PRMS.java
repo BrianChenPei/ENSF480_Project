@@ -62,6 +62,10 @@ public class PRMS {
 
 
     //Landlord's controller function
+    public String registerProperty(Property p){
+        db.addProperty(p);
+        return "Property Registered in Database";
+    }
     public String payFee(int houseID, int money){
         if (money >= fee){
             db.getProperty(houseID).setState("Active");
