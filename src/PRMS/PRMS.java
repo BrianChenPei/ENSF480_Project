@@ -131,31 +131,65 @@ public class PRMS {
             return "Not Enough Amount";
     }
 
+    /**
+     * user sign in function.
+     * @param username
+     * @param password
+     * @return String of user type
+     */
     public String signIn(String username, String password){
         String type = db.checkAccount(username);
         return type;
     }
 
+    /**
+     * gets landlord information from database
+     * @param username
+     * @return
+     */
     public Landlord getLandlord(String username){
         return db.getLandlord(username);
     }
 
+    /**
+     * gets manager information from database
+     * @param username
+     * @return
+     */
     public Manager getManager(String username){
         return db.getManager(username);
     }
 
+    /**
+     * gets registered renter information from database
+     * @param username
+     * @return
+     */
     public RegisteredRenter getRegisteredRenter(String username){
         return db.getRegRenter(username);
     }
 
+    /**
+     * gets all properties from database
+     * @return ArrayList<Property>
+     */
     public ArrayList<Property> managerPropertyEdit(){
         return db.getAllProperties();
     }
 
+    /**
+     * gets all landlord properties from database
+     * @param landlord
+     * @return ArrayList<Property>
+     */
     public ArrayList<Property> landlordPropertyEdit(String landlord){
         return db.getLandlordProperties(landlord);
     }
 
+    /**
+     * adds a user to database using databaseManager functions
+     * @param user
+     */
     public void addUser(User user){
         if(user.getUsertype().equals("Landlord")){
             db.addLandlord((Landlord)user);
