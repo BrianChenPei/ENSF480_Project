@@ -36,11 +36,10 @@ public class DatabaseManager{
     			addProperty.setBoolean(5, p.getFurnish());
 				addProperty.setString(6, p.getAddress());
     			addProperty.setString(7, p.getState());
-    			addProperty.setInt(8, p.getFee());
-    			addProperty.setString(9, p.getFeePeriodStart());
-    			addProperty.setString(10, p.getFeePeriodEnd());
-    			addProperty.setString(11, p.getLandlordName());
-    			addProperty.setString(12, p.getLandlordEmail());
+    			addProperty.setString(8, p.getFeePeriodStart());
+    			addProperty.setString(9, p.getFeePeriodEnd());
+    			addProperty.setString(10, p.getLandlordName());
+    			addProperty.setString(11, p.getLandlordEmail());
     			addProperty.executeUpdate();
     			System.out.println("Added new property");
     		}
@@ -105,8 +104,8 @@ public class DatabaseManager{
     			getProperty.setInt(1, ID);
     			ResultSet rs = getProperty.executeQuery();
     			Property p = new Property(rs.getString(1),rs.getString(2),rs.getInt(3),
-				rs.getInt(4),rs.getBoolean(5),rs.getString(6),rs.getString(7),rs.getInt(8),
-				rs.getString(9),rs.getString(10),rs.getString(11),rs.getString(12));
+				rs.getInt(4),rs.getBoolean(5),rs.getString(6),rs.getString(7), p.getFee(),
+				rs.getString(8),rs.getString(9),rs.getString(10),rs.getString(11));
     			conn.close();
     			return p;
     		}
@@ -400,7 +399,7 @@ public class DatabaseManager{
     	Connection conn = null;
     	PreparedStatement getUser = null;
     	String getUserString = "SELECT * from User WHERE userName = ?";
-    	try {
+    	try{
     		conn = getConn();
     		if(conn != null) {
     			getUser = conn.prepareStatement(getUserString);
@@ -469,8 +468,8 @@ public class DatabaseManager{
 
 	public static void main(String[] args) {
 		DatabaseManager db = new DatabaseManager();
-		Property Ahouse = new Property("10056", "Attached House", 2, 2, true, "null", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
-		Property apartment = new Property("1004", "Apartment", 2, 1, false, "123 road", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
+		Property Ahouse = new Property("10056", "Attached House", 2, 2, true, "NE", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
+		Property apartment = new Property("1004", "Apartment", 2, 1, false, "NW", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
 		db.addProperty(Ahouse);
 		db.addProperty(apartment);
 		Manager  m = new Manager("acaicedo", "Manager", "Andres", "Caicedo", "acaicedo@ucalgary.ca", "password");

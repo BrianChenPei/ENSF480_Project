@@ -35,8 +35,8 @@ public class CreateDatabase {
         try{
             stmt = c.createStatement();
             String sql = "CREATE TABLE Property " + "(ID TEXT PRIMARY KEY	NOT NULL," + " type TEXT     NOT NULL," + "Bedrooms INT     NOT NULL," 
-            + "Bathrooms INT  NOT NULL," + "Furnished BOOLEAN   NOT NULL,"+ " Address TEXT     NOT NULL,"+ " State TEXT     NOT NULL," + "Fee INT     NOT NULL," 
-            + " feePeriodStart TEXT		NOT NULL," + " feePeriodEnd TEXT		NOT NULL," + " landlordName TEXT		NOT NULL," +" landlordEmail TEXT	NOT NULL);";
+            + "Bathrooms INT  NOT NULL," + "Furnished BOOLEAN   NOT NULL,"+ " CityQuadrant TEXT     NOT NULL,"+ " State TEXT     NOT NULL," + 
+            " PeriodStart TEXT		NOT NULL," + " PeriodEnd TEXT		NOT NULL," + " landlordName TEXT		NOT NULL," +" landlordEmail TEXT	NOT NULL);";
             stmt.executeUpdate(sql);
             stmt.close();
         } catch(Exception e){

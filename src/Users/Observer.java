@@ -6,6 +6,7 @@ package Users;
  * href="mailto: brian.chen@ucalgary.ca">brian.chen@ucalgary.ca</a>
  */
 
+import java.util.ArrayList;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class Observer {
     }
 
     public void unsubscribe(RegisteredRenter renter){
-        subs.remove(sub);
+        subs.remove(renter);
     }
 	
 	public void notifySubscribers(String searchCriteria) {
@@ -44,7 +45,7 @@ public class Observer {
 	
 	public void newPost(String searchCriteria) {
 		this.searchCriteria = searchCriteria;
-		notifySubscribers();
+		notifySubscribers(searchCriteria);
 	}
 		
 }

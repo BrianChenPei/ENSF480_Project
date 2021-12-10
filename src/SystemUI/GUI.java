@@ -248,7 +248,7 @@ public class GUI extends JFrame{
                 p+=  "Not Furnished";
             }
             p +='/';
-            p+=  results.get(i).getLocation();
+            p+=  results.get(i).getAddress();
             lists.add(p);
         }
         JScrollPane scroll = new JScrollPane();
