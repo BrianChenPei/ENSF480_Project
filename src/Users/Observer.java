@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 import java.util.List;
 
+import Property.Property;
+
 /*
 To use: 
 
@@ -27,7 +29,7 @@ ob.newPost(...);
 
 public class Observer {
 	private List<RegisteredRenter> subs = new ArrayList<>();
-	private String searchCriteria;
+	private Property searchCriteria;
 	
 	public void subscribe(RegisteredRenter sub){
 		subs.add(sub);
@@ -43,7 +45,7 @@ public class Observer {
 		}
 	}
 	
-	public void newPost(String searchCriteria) {
+	public void newPost(Property searchCriteria) {
 		this.searchCriteria = searchCriteria;
 		notifySubscribers(searchCriteria);
 	}

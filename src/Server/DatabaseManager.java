@@ -34,7 +34,7 @@ public class DatabaseManager{
     			addProperty.setInt(3, p.getBedRoom());
 				addProperty.setInt(4, p.getBathroom());
     			addProperty.setBoolean(5, p.getFurnish());
-				addProperty.setString(6, p.getAddress());
+				addProperty.setString(6, p.getQuadrant());
     			addProperty.setString(7, p.getState());
     			addProperty.setString(8, p.getFeePeriodStart());
     			addProperty.setString(9, p.getFeePeriodEnd());
@@ -503,8 +503,8 @@ public class DatabaseManager{
 					rs3.getString(8),rs3.getString(9),rs.getString(10),rs3.getString(11));
         			temp.add(p);
     			}
-    			Report Report = new Report();////////NEED CTOR
-    			//conn.close();
+    			Report Report = new Report(start, end, rs.getInt(1), rs1.getInt(1), rs2.getInt(1), temp);
+
     			return Report;
     		}
     		//conn.close();

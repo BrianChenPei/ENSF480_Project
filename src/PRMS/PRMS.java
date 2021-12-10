@@ -20,7 +20,7 @@ public class PRMS {
     }
     //Renterr's controller function
     public ArrayList<Property> getProperties(Property searchCriteria){
-        return db.getProperties(searchCriteria);
+        return db.SearchProperties(searchCriteria);
     }
 
 

@@ -74,7 +74,7 @@ public class RegisteredRenter {
     }
 	
     public void update(Property searchCriteria) {
-		for(Property p : data.getProperties(searchCriteria)) {
+		for(Property p : data.SearchProperties(searchCriteria)) {
 			System.out.println(p);
 		}
 	}

@@ -15,7 +15,6 @@ import javax.swing.ScrollPaneConstants;
 
 import Property.*;
 import PRMS.*;
-import Email.*;
 import Users.*;
 
 /**
@@ -243,7 +242,7 @@ public class GUI extends JFrame{
         for(int i = 0; i < 15; i++){
             String p = results.get(i).getType();
             p +='/';
-            p+=  results.get(i).getAddress();
+            p+=  results.get(i).getQuadrant();
             p +='/';
             p+=  results.get(i).getBedRoom() + "bedrooms";
             p +='/';
@@ -257,7 +256,7 @@ public class GUI extends JFrame{
                 p+=  "Not Furnished";
             }
             p +='/';
-            p+=  results.get(i).getAddress();
+            p+=  results.get(i).getQuadrant();
             lists.add(p);
         }
         JScrollPane scroll = new JScrollPane();
@@ -284,7 +283,7 @@ public class GUI extends JFrame{
      */
     private void createEmailPanel(Property p){
         emailPanel = new JPanel(new BorderLayout());
-        emailPanel.add("North", new JLabel("Send email to landlord of: "+ p.getAddress()));
+        emailPanel.add("North", new JLabel("Send email to landlord of: "+ p.getQuadrant()));
         JTextArea writingSpace = new JTextArea(30, 50);
         emailPanel.add("Center", writingSpace);
         JTextArea emailSpace = new JTextArea("Email address:", 30, 50);
@@ -436,8 +435,8 @@ public class GUI extends JFrame{
         list.addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent e){
                 int i = list.getSelectedIndex();
-                Property p = results.get(i);
-                createEmailPanel(p);
+               //Property p = results.get(i); What does this mean here? --Andres
+                //createEmailPanel(p);
                 previousPanel = notificationPanel;
                 frame.setContentPane(emailPanel);
                 frame.validate();
