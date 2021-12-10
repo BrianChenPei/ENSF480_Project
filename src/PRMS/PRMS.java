@@ -9,13 +9,14 @@ import java.util.ArrayList;
 import SystemUI.*;
 
 public class PRMS {
-
+    private int fee;
+    private int period;
     private DatabaseManager db;
-    private GUI gui;
 
     public PRMS(){
+        fee = 20;
+        period =60;
         db = new DatabaseManager();
-        gui = new GUI();
     }
     //Renterr's controller function
     public ArrayList<Property> getProperties(Property searchCriteria){
@@ -28,20 +29,24 @@ public class PRMS {
         return db.getReport(start, end).Display();
     }
 
-    public String changeFee(int houseID, int fee){
+    public String changeFee(int fee){
         if(fee>=0){
-            db.getProperty(houseID).setFee(fee);
-            return "Property Fee changed";
+            this.fee = fee;
+            return "Fee changed";
         }
         else{
             return "Invalid Fee Amount.";
         }
     }
 
-    public String changeFeePeriod(int houseID, String start, String end){
-        db.getProperty(houseID).setFeePeriodStart(start);
-        db.getProperty(houseID).setFeePeriodEnd(end);
-        return "Property Period Changed";
+    public String changeFeePeriod(int period){
+        if(period>=0){
+            this.period = period;
+            return "Period changed";
+        }
+        else{
+            return "Invalid Period Amount.";
+        }
     }
 
     public String changeState(int houseID, String newState){
@@ -58,7 +63,8 @@ public class PRMS {
 
     //Landlord's controller function
     public String payFee(int houseID, int money){
-        if (money >= db.getProperty(houseID).getFee()){
+        if (money >= fee){
+            db.getProperty(houseID).setState("Active");
             return "Fee Paid";
         }
         else
