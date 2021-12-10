@@ -1,5 +1,6 @@
-package Users;
+//package Users;
 
+/*
 
 public class Renter implements User{
     protected String searchCriteria;
@@ -28,3 +29,4 @@ public class Renter implements User{
     
     
 }
+*/
