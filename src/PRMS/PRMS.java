@@ -75,6 +75,40 @@ public class PRMS {
             return "Not Enough Amount";
     }
 
+    public String signIn(String username, String password){
+        String type = db.checkAccount(username);
+        return type;
+    }
+
+    public Landlord getLandlord(String username){
+        return db.getLandlord(username);
+    }
+
+    public Manager getManager(String username){
+        return db.getManager(username);
+    }
+
+    public RegisteredRenter getRegisteredRenter(String username){
+        return db.getRegRenter(username);
+    }
+
+    public ArrayList<Property> managerPropertyEdit(){
+        return db.getAllProperties();
+    }
+
+    public ArrayList<Property> landlordPropertyEdit(String landlord){
+        return db.getLandlordProperties(landlord);
+    }
+
+    public void addUser(User user){
+        if(user.getUsertype().equals("Landlord")){
+            db.addLandlord((Landlord)user);
+        }else if(user.getUsertype().equals("Manager")){
+            db.addManager((Manager)user);
+        }else{
+            db.addRegRenter((RegisteredRenter)user);
+        }
+    }
     /*public static void main(String[] args){
         PRMS system = new PRMS();
     }*/
