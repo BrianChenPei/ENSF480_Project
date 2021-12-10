@@ -4,7 +4,7 @@ import Property.*;
 import Server.*;
 import java.util.ArrayList;
 
-public class RegisteredRenter {
+public class RegisteredRenter implements User{
     private String userName;
     private String fname;
     private String usertype;
