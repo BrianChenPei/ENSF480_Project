@@ -456,7 +456,7 @@ public class DatabaseManager{
 					rs3.getString(9),rs3.getString(10),rs3.getString(11),rs3.getString(12));
         			temp.add(p);
     			}
-    			Report Report = new Report();////////
+    			Report Report = new Report();////////NEED CTOR
     			//conn.close();
     			return Report;
     		}
@@ -469,16 +469,16 @@ public class DatabaseManager{
 
 	public static void main(String[] args) {
 		DatabaseManager db = new DatabaseManager();
-		// Property Ahouse = new Property("1002", "Attached House", 2, 2, true, "null", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
+		Property Ahouse = new Property("10056", "Attached House", 2, 2, true, "null", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
 		Property apartment = new Property("1004", "Apartment", 2, 1, false, "123 road", "Available", 1000, "november", "december", "Mike", "mike@ucalgary.ca");
-		// db.addProperty(Ahouse);
+		db.addProperty(Ahouse);
 		db.addProperty(apartment);
 		Manager  m = new Manager("acaicedo", "Manager", "Andres", "Caicedo", "acaicedo@ucalgary.ca", "password");
 		db.addManager(m);
 		RegisteredRenter  r = new RegisteredRenter("kaitlin12", "Registered Renter", "Kaitlin", "Culligan", "kcull@ucalgary.ca", "password");
-		db.removeRegRenter(r);
+		db.addRegRenter(r);
 		Landlord  d = new Landlord("zheng123", "Landlord", "Zheng", "Chen", "zchen@ucalgary.ca", "password");
-		db.removeLandlord(d);
+		db.addLandlord(d);
 
 		ArrayList<Property> disp =  db.getLandlordProperties("Mike");
 		for (Property i : disp){
