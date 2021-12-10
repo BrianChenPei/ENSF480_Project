@@ -73,7 +73,7 @@ public class RegisteredRenter extends Renter{
         this.password = password;
     }
 	
-    public void update(String searchCriteria) {
+    public void update(Property searchCriteria) {
 		for(Property p : data.getProperties(searchCriteria)) {
 			System.out.println(p);
 		}

@@ -36,7 +36,7 @@ public class Observer {
         subs.remove(sub);
     }
 	
-	public void notifySubscribers(String searchCriteria) {
+	public void notifySubscribers(Property searchCriteria) {
 		for(RegisteredRenter sub : subs) {
 			sub.update(searchCriteria);
 		}
@@ -44,7 +44,7 @@ public class Observer {
 	
 	public void newPost(String searchCriteria) {
 		this.searchCriteria = searchCriteria;
-		notifySubscribers();
+		notifySubscribers(searchCriteria);
 	}
 		
 }
