@@ -10,7 +10,7 @@ import Property.*;
 public class Landlord implements User{
     private String userName;
     private String fname;
-    private String usertype;
+    private String usertype = "Landlord";
     private String lname;
     private String email;
     private String password;
