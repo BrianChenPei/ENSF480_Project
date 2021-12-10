@@ -6,7 +6,6 @@ import Server.DatabaseManager;
 import Server.*;
 import java.util.ArrayList;
 
-import Email.Email;
 import SystemUI.*;
 
 public class PRMS {
