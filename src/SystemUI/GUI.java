@@ -49,6 +49,7 @@ public class GUI extends JFrame{
     RegisteredRenter registeredRenter;
     Landlord landlord;
     Manager manager;
+    Email email;
     boolean loggedIn = false;
     boolean notifications = true;
 
@@ -56,6 +57,8 @@ public class GUI extends JFrame{
      * Constructor
      */
     public GUI(){
+        prms = new PRMS();
+
         Login.getOnlyInstance();
         createLoginPanel();
         createSearchPanel();
@@ -255,7 +258,9 @@ public class GUI extends JFrame{
         JList<String> list = new JList<String>(lists.toArray(new String[lists.size()]));
         list.addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent e){
-                createEmailPanel(list.getSelectedValue());
+                int i = list.getSelectedIndex();
+                Property p = results.get(i);
+                createEmailPanel(p);
                 previousPanel = propertyPanel;
                 frame.setContentPane(emailPanel);
                 frame.validate();
@@ -269,18 +274,18 @@ public class GUI extends JFrame{
 
     /**
      *  sets up the email panel
-     * @param s address of property being emailed about
+     * @param p property being emailed about
      */
-    private void createEmailPanel(String s){
+    private void createEmailPanel(Property p){
         emailPanel = new JPanel(new BorderLayout());
-        emailPanel.add("North", new JLabel("Send email to landlord of: "+s));
+        emailPanel.add("North", new JLabel("Send email to landlord of: "+ p.getAddress()));
         JTextArea writingSpace = new JTextArea(30, 50);
         emailPanel.add("Center", writingSpace);
         JButton sendButton = new JButton("Send");
         sendButton.addActionListener(
             new ActionListener(){
                 public void actionPerformed(ActionEvent evt){
-                    //send email to landlord
+                    email.sendEmail(p);
                     frame.setContentPane(previousPanel);
                      frame.validate();
                 }
@@ -556,9 +561,27 @@ public class GUI extends JFrame{
         c.gridx =2;
         JTextField typeField = new JTextField(20);
         registerPanel.add(typeField, c);
+        c.gridx = 0;
+        c.gridy = 5;
+        registerPanel.add(new JLabel("First Name:"),c);
+        c.gridx =2;
+        JTextField fNameField = new JTextField(20);
+        registerPanel.add(fNameField, c);
+        c.gridx = 0;
+        c.gridy = 6;
+        registerPanel.add(new JLabel("Last Name:"),c);
+        c.gridx =2;
+        JTextField lNameField = new JTextField(20);
+        registerPanel.add(lNameField, c);
+        c.gridx = 0;
+        c.gridy = 7;
+        registerPanel.add(new JLabel("Email:"),c);
+        c.gridx =2;
+        JTextField emailField = new JTextField(20);
+        registerPanel.add(emailField, c);
 
         c.gridx = 1;
-        c.gridy = 5;
+        c.gridy = 8;
         JButton enterButton = new JButton("Register");
         enterButton.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent evt){

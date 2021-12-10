@@ -6,29 +6,23 @@ import Server.DatabaseManager;
 import Server.*;
 import java.util.ArrayList;
 
-import Email.Email;
 import SystemUI.*;
 
 public class PRMS {
-    private int postingPeriod;
-    private int postingFee;
+    private int fee;
+    private int period;
     private DatabaseManager db;
-    private GUI gui;
 
     public PRMS(){
-        postingPeriod =60;
-        postingFee =200;
+        fee = 20;
+        period =60;
         db = new DatabaseManager();
-        gui = new GUI();
     }
     //Renterr's controller function
     public ArrayList<Property> getProperties(Property searchCriteria){
         return db.getProperties(searchCriteria);
     }
-    public void sendEmail (String message, Property p){
-        Email em = new Email(message, p.getLandlordEmail());
-        em.sendTo();
-    }
+
 
     //Manger's controller function
     public String askReport(String start, String end){
@@ -37,8 +31,8 @@ public class PRMS {
 
     public String changeFee(int fee){
         if(fee>=0){
-            postingFee = fee;
-            return "You Have Changed the Posting Fee.";
+            this.fee = fee;
+            return "Fee changed";
         }
         else{
             return "Invalid Fee Amount.";
@@ -46,9 +40,9 @@ public class PRMS {
     }
 
     public String changeFeePeriod(int period){
-        if(postingPeriod>0){
-            postingFee = period;
-            return "You Have Changed the Posting Period.";
+        if(period>=0){
+            this.period = period;
+            return "Period changed";
         }
         else{
             return "Invalid Period Amount.";
@@ -68,18 +62,17 @@ public class PRMS {
 
 
     //Landlord's controller function
+    public String registerProperty(Property p){
+        db.addProperty(p);
+        return "Property Registered in Database";
+    }
     public String payFee(int houseID, int money){
-        if(money<=0) return "Invalid Payment Amount";
-        Property p = db.getProperty(houseID);
-        if(p!=null){
-            int earlyFee = p.getFee();
-            db.getProperty(houseID).setFee(earlyFee+money);
-            if( db.getProperty(houseID).getFee() >= postingFee){
-                db.getProperty(houseID).setState("Active");
-            }
-            return "Fee Payment Succeed";
+        if (money >= fee){
+            db.getProperty(houseID).setState("Active");
+            return "Fee Paid";
         }
-        return "Invalid Property";
+        else
+            return "Not Enough Amount";
     }
 
     /*public static void main(String[] args){

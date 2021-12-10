@@ -4,7 +4,7 @@ import Property.*;
 import Server.*;
 import java.util.ArrayList;
 
-public class RegisteredRenter extends Renter{
+public class RegisteredRenter {
     private String userName;
     private String fname;
     private String usertype;
@@ -73,7 +73,7 @@ public class RegisteredRenter extends Renter{
         this.password = password;
     }
 	
-    public void update(String searchCriteria) {
+    public void update(Property searchCriteria) {
 		for(Property p : data.getProperties(searchCriteria)) {
 			System.out.println(p);
 		}

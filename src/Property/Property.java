@@ -23,6 +23,15 @@ public class Property {
     private String landlordName; //11
     private String landlordEmail; //12
 
+    //constructor for search criteria
+    public Property (String type, int bed, int bath, boolean furn, String add){
+        this.type=type;
+        this.bedroom = bed;
+        this.bathroom = bath;
+        this.furnished = furn;
+        this.address = add;
+    }
+
     public Property(String id, String type,
     int bed, int bath, boolean furn, String add, String ls, int fee,
     String feeStart, String feeEnd, String Lln, String Lle){

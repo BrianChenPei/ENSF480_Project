@@ -37,7 +37,7 @@ public class Observer {
         subs.remove(renter);
     }
 	
-	public void notifySubscribers(String searchCriteria) {
+	public void notifySubscribers(Property searchCriteria) {
 		for(RegisteredRenter sub : subs) {
 			sub.update(searchCriteria);
 		}
