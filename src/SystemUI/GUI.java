@@ -45,11 +45,9 @@ public class GUI extends JFrame{
     //control variables
     PRMS prms;
     User user;
-    Renter renter;
     RegisteredRenter registeredRenter;
     Landlord landlord;
     Manager manager;
-    Email email;
     boolean loggedIn = false;
     boolean notifications = true;
 
@@ -215,8 +213,16 @@ public class GUI extends JFrame{
         searchButton.addActionListener(
             new ActionListener(){
                 public void actionPerformed(ActionEvent evt){
-                String searchCriteria = typeField.getText(); //have to append a string together
-                ArrayList<Property> results = prms.searchProperty(searchCriteria);
+                int bedrooms = Integer.parseInt(bedroomField.getText());
+                int bathrooms = Integer.parseInt(bathroomField.getText());
+                boolean furnished;
+                if(furnField.getText().toLowerCase().equals("furnished")){
+                    furnished = true;
+                }else{
+                    furnished = false;
+                }
+                Property searchCriteria = new Property(typeField.getText(), bedrooms, bathrooms, furnished, quadField.getText());
+                ArrayList<Property> results = prms.getProperties(searchCriteria);
                 //update propertyPanel
                 createPropertyPanel(results);
                  frame.setContentPane(propertyPanel);
@@ -281,11 +287,14 @@ public class GUI extends JFrame{
         emailPanel.add("North", new JLabel("Send email to landlord of: "+ p.getAddress()));
         JTextArea writingSpace = new JTextArea(30, 50);
         emailPanel.add("Center", writingSpace);
+        JTextArea emailSpace = new JTextArea("Email address:", 30, 50);
+        emailPanel.add("South", emailSpace);
         JButton sendButton = new JButton("Send");
         sendButton.addActionListener(
             new ActionListener(){
                 public void actionPerformed(ActionEvent evt){
-                    email.sendEmail(p);
+                    JOptionPane.showMessageDialog(null, "Email has been sent",
+                    "Email Sent", JOptionPane.PLAIN_MESSAGE);
                     frame.setContentPane(previousPanel);
                      frame.validate();
                 }
@@ -357,8 +366,10 @@ public class GUI extends JFrame{
             report.addActionListener(
                 new ActionListener(){
                     public void actionPerformed(ActionEvent evt){
+                        String start = JOptionPane.showInputDialog(null, "Please enter the starting month for the report");
+                        String end = JOptionPane.showInputDialog(null, "Please enter the ending month for the report");
                         JTextArea reportWriteup = new JTextArea();
-                        String placeholder = "data";
+                        String placeholder = prms.askReport(start, end);
                         reportWriteup.setColumns(30);
                         reportWriteup.setRows(20);
                         reportWriteup.setText(placeholder);
@@ -424,7 +435,9 @@ public class GUI extends JFrame{
         JList<String> list = new JList<String>(lists.toArray(new String[lists.size()]));
         list.addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent e){
-                createEmailPanel(list.getSelectedValue());
+                int i = list.getSelectedIndex();
+                Property p = results.get(i);
+                createEmailPanel(p);
                 previousPanel = notificationPanel;
                 frame.setContentPane(emailPanel);
                 frame.validate();
@@ -508,8 +521,16 @@ public class GUI extends JFrame{
         listButton.addActionListener(
             new ActionListener(){
                 public void actionPerformed(ActionEvent evt){
-                    //pull stuff
-                //update prms
+                    int bedrooms = Integer.parseInt(bedroomField.getText());
+                    int bathrooms = Integer.parseInt(bathroomField.getText());
+                    boolean furnished;
+                    if(furnField.getText().toLowerCase().equals("furnished")){
+                        furnished = true;
+                    }else{
+                        furnished = false;
+                    }
+                    Property newListing = new Property(typeField.getText(), bedrooms, bathrooms, furnished, quadField.getText());
+                prms.registerProperty(newListing);
                 JOptionPane.showMessageDialog(null, "Press the OK button below to pay",
                     "Please Pay", JOptionPane.PLAIN_MESSAGE);
                 //update prms again
@@ -750,3 +771,5 @@ public class GUI extends JFrame{
 
     }
 }
+
+
