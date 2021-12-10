@@ -2,6 +2,8 @@ package SystemUI;
 
 import java.util.ArrayList;
 
+import PRMS.*;
+import Users.*;
 /**
  * @version 1.0
  * @since 1.0
@@ -9,10 +11,12 @@ import java.util.ArrayList;
  * href="mailto: kaitlin.culligan@ucalgary.ca">kaitlin.culligan@ucalgary.ca</a>
  */
 class Login {
-    private ArrayList<String> passwords;
-    private ArrayList<String> usernames;
     public static Login onlyInstance;
-
+    private PRMS prms;
+    private RegisteredRenter registeredRenter;
+    private Landlord landlord;
+    private Manager manager;
+    String type;
     /**
      * logs in user
      * @param username username to use
@@ -20,11 +24,32 @@ class Login {
      * @return true if user exists, false if not
      */
     public boolean login(String username, String password){
-        if(onlyInstance.usernames.contains(username) && onlyInstance.passwords.contains(password)){
-            return true;
-        }else{
+        String accountType = prms.signIn(username, password);
+        type = accountType;
+        if(accountType.equals("NE")){
             return false;
+        }else if(accountType.equals("Landlord")){
+            landlord = prms.getLandlord(username);
+            return true;
         }
+        else if(accountType.equals("Manager")){
+            manager = prms.getManager(username);
+            return true;
+        }
+        else if(accountType.equals("Registered Renter")){
+            registeredRenter = prms.getRegisteredRenter(username);
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean logout(){
+        landlord = null;
+        manager = null;
+        registeredRenter = null;
+        type = null;
+        return false;
     }
 
     /**
@@ -38,50 +63,25 @@ class Login {
         return onlyInstance;
     }
 
-    /**
-     * adds a username to the login instance
-     * @param user username to add
-     */
-    public void addUsername(String user){
-        Login instance = getOnlyInstance();
-        instance.getUsernames().add(user);
+    public Landlord getLandlord(){
+        return landlord;
     }
 
-    /**
-     * sets a username at a particular index
-     * @param index index to use
-     * @param newUser new username to set
-     */
-    public void setUsername(int index, String newUser){
-        Login instance = getOnlyInstance();
-        instance.getUsernames().set(index, newUser);
+    public Manager getManager(){
+        return manager;
     }
 
-    /**
-     * removes a username from the class
-     * @param newUser username to remove
-     */
-    public void removeUsername(String newUser){
-        Login instance = getOnlyInstance();
-        int index =  instance.getUsernames().indexOf(newUser);
-        instance.getUsernames().remove(index);
+    public RegisteredRenter getRegisteredRenter(){
+        return registeredRenter;
     }
 
-    /**
-     * returns the array list of usernames
-     * @return usernames of onlyInstance
-     */
-    public ArrayList<String> getUsernames(){
-        return getOnlyInstance().usernames;
+    public String getType(){
+        return type;
     }
     /**
      * constructor
      */
     private Login(){
-        passwords = new ArrayList<>();
-        usernames = new ArrayList<>();
-        //populate arraylists from PRMS
-        passwords.add("test");
-        usernames.add("user");
+        prms = new PRMS();
     }
 }

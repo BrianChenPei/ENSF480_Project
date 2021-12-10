@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * @since 1.0
  */
 
-public class RegisteredRenter {
+public class RegisteredRenter implements User{
     private String userName;
     private String fname;
     private String usertype;
