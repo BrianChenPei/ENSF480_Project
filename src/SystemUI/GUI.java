@@ -529,8 +529,24 @@ public class GUI extends JFrame{
         JTextField quadField = new JTextField(20);
         listPanel.add(quadField,c);
 
+        c.gridx = 0;
+        c.gridy = 6;
+        listPanel.add(new JLabel("Start Date:"),c);
         c.gridx = 2;
         c.gridy = 6;
+        JTextField startField = new JTextField(20);
+        listPanel.add(startField,c);
+
+        c.gridx = 0;
+        c.gridy = 7;
+        listPanel.add(new JLabel("EndDate:"),c);
+        c.gridx = 2;
+        c.gridy = 7;
+        JTextField endField = new JTextField(20);
+        listPanel.add(endField,c);
+
+        c.gridx = 2;
+        c.gridy = 8;
         c.insets = new Insets(0,0,50,0);
         JButton listButton = new JButton("List");
         listButton.addActionListener(
@@ -547,6 +563,8 @@ public class GUI extends JFrame{
                     Property newListing = new Property(typeField.getText(), bedrooms, bathrooms, furnished, quadField.getText());
                     newListing.setLandlordName(Login.getOnlyInstance().getLandlord().getFname());
                     newListing.setLandlordEmail(Login.getOnlyInstance().getLandlord().getEmail());
+                    newListing.setFeePeriodStart(startField);
+                    newListing.setFeePeriodEnd(endField);
                     prms.registerProperty(newListing);
                 JOptionPane.showMessageDialog(null, "Press the OK button below to pay",
                     "Please Pay", JOptionPane.PLAIN_MESSAGE);
