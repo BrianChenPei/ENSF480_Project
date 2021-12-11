@@ -475,15 +475,14 @@ public class DatabaseManager{
 	public Report getReport(String start, String end) {
     	Connection conn = null;
     	PreparedStatement getReport = null;
-    	String getListedString = "SELECT COUNT(*) AS NumberOfListed FROM Property WHERE \r\n" + 
-    			"        strftime('%s', feePeriodStart) BETWEEN strftime('%s', ?) AND strftime('%s', ?)";
+    	String getListedString = "SELECT COUNT(*) AS NumberOfListed FROM Property WHERE strftime('%s', PeriodStart) ";
     	String getRentedString = "SELECT COUNT(*) AS NumberOfRented FROM Property WHERE \r\n" + 
-    			"  		 strftime('%s', feePeriodStart) BETWEEN strftime('%s', ?) AND strftime('%s', ?) AND listingState = 'Rented'";
+    			"  		 strftime('%s', PeriodStart) BETWEEN strftime('%s', ?) AND strftime('%s', ?) AND State = 'Rented'";
     	String getActiveString = "SELECT COUNT(*) AS NumberOfActive FROM Property WHERE \r\n" + 
-    			"  		 strftime('%s', feePeriodStart) BETWEEN strftime('%s', ?) AND strftime('%s', ?) AND listingState = 'Active'";
+    			"  		 strftime('%s', PeriodStart) BETWEEN strftime('%s', ?) AND strftime('%s', ?) AND State = 'Active'";
     	ArrayList<Property> temp = new ArrayList<Property>();
     	String getAllRentedString = "SELECT * FROM Property WHERE \r\n" + 
-    			"    	 strftime('%s', feePeriodStart) BETWEEN strftime('%s', ?) AND strftime('%s', ?) AND listingState = 'Rented'";
+    			"    	 strftime('%s', PeriodStart) BETWEEN strftime('%s', ?) AND strftime('%s', ?) AND State = 'Rented'";
     	try {
     		conn = getConn();
     		if(conn != null) {
@@ -531,8 +530,8 @@ public class DatabaseManager{
         		getAllUsers = conn.prepareStatement(getAllUsersString);
         		ResultSet rs = getAllUsers.executeQuery();
         		while(rs.next()) {
-        			temp.add(rs.getString(1)+ "--" + rs.getString(2) +"--" +  rs.getString(3) 
-					+ "--" + rs.getString(4) + "--" + rs.getString(5) + "--" +  rs.getString(6));
+        			temp.add(rs.getString(1)+ "\t" + rs.getString(2) + "\t" +  rs.getString(3) 
+					+ "\t" + rs.getString(4) + "\t" + rs.getString(5) + "\t" +  rs.getString(6));
         		}
         		conn.close();
         		return temp;
@@ -546,19 +545,21 @@ public class DatabaseManager{
 
 	public static void main(String[] args) {
 		DatabaseManager db = new DatabaseManager();
-		Property Ahouse = new Property("Attached House", 2, 2, true, "NE");
-		Property apartment = new Property("123", "Apartment", 2, 1, false, "NW", "Available", "november", "december", "Mike", "mike@ucalgary.ca");
+		// Property Ahouse = new Property("Attached House", 2, 2, true, "NE");
+		//Property apartment = new Property("1235", "Apartment", 2, 1, false, "NW", "Available", "2014-10-07 02:34:56", "2017-10-07 02:34:56", "Mike", "mike@ucalgary.ca");
 		// db.addProperty(Ahouse);
-		// db.addProperty(apartment);
+		//db.addProperty(apartment);
 		// Manager  m = new Manager("acaicedo", "Manager", "Andres", "Caicedo", "acaicedo@ucalgary.ca", "password");
 		// db.addManager(m);
 		// RegisteredRenter  r = new RegisteredRenter("kaitlin12", "Registered Renter", "Kaitlin", "Culligan", "kcull@ucalgary.ca", "password");
 		// db.addRegRenter(r);
-		Landlord  d = new Landlord("zheng", "Landlord", "Zheng", "Chen", "zchen@ucalgary.ca", "p1234567");
+		//Landlord  d = new Landlord("zheng", "Landlord", "Zheng", "Chen", "zchen@ucalgary.ca", "p1234567");
 		//db.addLandlord(d);
 
-		// ArrayList<String> list = db.getAllUsers();
+		ArrayList<String> list = db.getAllUsers();
 
+		Report r = db.getReport("2014-10-07", "2017-10-07");
+		r.Display();
 		// for (String p : list){
 		// 	System.out.println(p);
 		// }
@@ -570,16 +571,16 @@ public class DatabaseManager{
 		// else{
 		// 	System.out.println("Account does not exist");
 		// }
-		String username = "zheng";
-		String typee = db.checkAccount(username);
-		if (typee != "NE"){
-			System.out.println("Account exist!: " + typee);
-			//if else if else
-			Landlord p = db.getLandlord(username);
-			System.out.println(p.getPassword());
-		}
-		else{
-			System.out.println("Account does not exist");
-		}
+		// String username = "zheng";
+		// String typee = db.checkAccount(username);
+		// if (typee != "NE"){
+		// 	System.out.println("Account exist!: " + typee);
+		// 	//if else if else
+		// 	Landlord p = db.getLandlord(username);
+		// 	System.out.println(p.getPassword());
+		// }
+		// else{
+		// 	System.out.println("Account does not exist");
+		// }
 	}	
 }
