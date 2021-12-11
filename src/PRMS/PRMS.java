@@ -29,11 +29,17 @@ public class PRMS {
     private int fee;
     private int period;
     private DatabaseManager db;
+    private RegisteredRenter rr;
+    private Observer observer;
 
     public PRMS(){
         fee = 20;
         period =60;
         db = new DatabaseManager();
+        rr = new RegisteredRenter();
+        observer = new Observer();
+        rr.subscribeCriteria(observer);
+        observer.subscribe(rr);
     }
 
     //Renterr's controller function
@@ -113,6 +119,7 @@ public class PRMS {
      */
     public String registerProperty(Property p){
         db.addProperty(p);
+        observer.newPost(p);
         return "Property Registered in Database";
     }
 
@@ -199,6 +206,11 @@ public class PRMS {
             db.addRegRenter((RegisteredRenter)user);
         }
     }
+
+    public RegisteredRenter getRR(){
+        return rr;
+    }
+
     /*public static void main(String[] args){
         PRMS system = new PRMS();
     }*/

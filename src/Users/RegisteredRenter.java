@@ -48,6 +48,10 @@ public class RegisteredRenter implements User{
         this.password = password;
     }
 
+    public RegisteredRenter(){
+
+    }
+
     /**
      * username getter.
      * @return String
@@ -149,7 +153,7 @@ public class RegisteredRenter implements User{
      * @param searchCriteria
      */
     public void update(Property searchCriteria) {
-		properties = (ArrayList<Property>)(data.SearchProperties(searchCriteria)).clone();
+		properties.add(searchCriteria);
 	}
 	
     /**
@@ -166,6 +170,14 @@ public class RegisteredRenter implements User{
      */
     public Observer getObserver(){
         return channel;
+    }
+
+    public ArrayList<Property> getNewProperties(){
+        return properties;
+    }
+
+    public void setNewProperties(ArrayList<Property> p){
+        properties = p;
     }
 /*
 	public static void main(String[] args){
