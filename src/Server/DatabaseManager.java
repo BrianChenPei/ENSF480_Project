@@ -275,13 +275,12 @@ public class DatabaseManager{
 	public Landlord getLandlord(String username) {
     	Connection conn = null;
     	PreparedStatement getUser = null;
-    	String getUserString = "SELECT * FROM User WHERE userName = ? AND type = ?";
+    	String getUserString = "SELECT * FROM User WHERE userName = ?";
     	try {
     		conn = getConn();
     		if(conn != null) {
     			getUser = conn.prepareStatement(getUserString);
     			getUser.setString(1, username);
-				getUser.setString(2, "Landlord");
     			ResultSet rs = getUser.executeQuery();
     			Landlord u = new Landlord(rs.getString(1), rs.getString(2),
 				rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6));
@@ -514,6 +513,30 @@ public class DatabaseManager{
     	return null;
     }
 
+	public ArrayList<String> getAllUsers(){
+		Connection conn = null;
+        PreparedStatement getAllUsers = null;
+        String getAllUsersString = "SELECT * from User";
+        ArrayList<String> temp = new ArrayList<String>();
+        try {
+        	conn = getConn();
+        	if(conn != null) {
+        		getAllUsers = conn.prepareStatement(getAllUsersString);
+        		ResultSet rs = getAllUsers.executeQuery();
+        		while(rs.next()) {
+        			temp.add(rs.getString(1)+ "--" + rs.getString(2) +"--" +  rs.getString(3) 
+					+ "--" + rs.getString(4) + "--" + rs.getString(5) + "--" +  rs.getString(6));
+        		}
+        		conn.close();
+        		return temp;
+        	}
+        } catch(ClassNotFoundException | SQLException e) {
+        	e.printStackTrace();
+        }
+        return null;
+
+	}
+
 	public static void main(String[] args) {
 		DatabaseManager db = new DatabaseManager();
 		Property Ahouse = new Property("Attached House", 2, 2, true, "NE");
@@ -524,14 +547,14 @@ public class DatabaseManager{
 		// db.addManager(m);
 		// RegisteredRenter  r = new RegisteredRenter("kaitlin12", "Registered Renter", "Kaitlin", "Culligan", "kcull@ucalgary.ca", "password");
 		// db.addRegRenter(r);
-		Landlord  d = new Landlord("king", "Landlord", "Zheng", "Chen", "zchen@ucalgary.ca", "password");
-		// db.addLandlord(d);
+		Landlord  d = new Landlord("zheng", "Landlord", "Zheng", "Chen", "zchen@ucalgary.ca", "p1234567");
+		//db.addLandlord(d);
 
-		ArrayList<Property> list = db.SearchProperties(Ahouse);
+		// ArrayList<String> list = db.getAllUsers();
 
-		for (Property p : list){
-			System.out.println(p.getID());
-		}
+		// for (String p : list){
+		// 	System.out.println(p);
+		// }
 		// String type = db.checkAccount("none");
 
 		// if (type != "NE"){
@@ -540,13 +563,16 @@ public class DatabaseManager{
 		// else{
 		// 	System.out.println("Account does not exist");
 		// }
-		
-		// String typee = db.checkAccount("king");
-		// if (typee != "NE"){
-		// 	System.out.println("Account exist!: " + typee);
-		// }
-		// else{
-		// 	System.out.println("Account does not exist");
-		// }
+		String username = "zheng";
+		String typee = db.checkAccount(username);
+		if (typee != "NE"){
+			System.out.println("Account exist!: " + typee);
+			//if else if else
+			Landlord p = db.getLandlord(username);
+			System.out.println(p.getPassword());
+		}
+		else{
+			System.out.println("Account does not exist");
+		}
 	}	
 }
