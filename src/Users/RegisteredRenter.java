@@ -153,7 +153,9 @@ public class RegisteredRenter implements User{
      * @param searchCriteria
      */
     public void update(Property searchCriteria) {
+
 		properties.add(searchCriteria);
+
 	}
 	
     /**
