@@ -545,7 +545,7 @@ public class GUI extends JFrame{
                         furnished = false;
                     }
                     Property newListing = new Property(typeField.getText(), bedrooms, bathrooms, furnished, quadField.getText());
-                    newListing.setLandlordName(Login.getOnlyInstance().getLandlord().getFname()+" "+Login.getOnlyInstance().getLandlord().getLname());
+                    newListing.setLandlordName(Login.getOnlyInstance().getLandlord().getFname());
                     newListing.setLandlordEmail(Login.getOnlyInstance().getLandlord().getEmail());
                     prms.registerProperty(newListing);
                 JOptionPane.showMessageDialog(null, "Press the OK button below to pay",
@@ -654,22 +654,23 @@ public class GUI extends JFrame{
         modifyPanel = new JPanel(new BorderLayout());
         ArrayList<Property> results;
         if(Login.getOnlyInstance().getType().equals("Landlord")){
-            results = prms.landlordPropertyEdit(Login.getOnlyInstance().getLandlord().getFname()+" "+ Login.getOnlyInstance().getLandlord().getFname());
+            results = prms.landlordPropertyEdit(Login.getOnlyInstance().getLandlord().getFname());
         }
         else{
             results = prms.managerPropertyEdit();
         }
-        ArrayList<String> lists = new ArrayList<>(15);
+        ArrayList<String> lists = new ArrayList<>();
         //make Strings out of query results
-        for(int i = 0; i < 15; i++){
-            String p = results.get(i).getType();
+        for(Property y : results){
+
+            String p = y.getType();
             p +='/';
-            p+=  results.get(i).getQuadrant();
+            p+=  y.getQuadrant();
             p +='/';
-            p+=  results.get(i).getBedRoom() + "bedrooms";
+            p+=  y.getBedRoom() + "bedrooms";
             p +='/';
-            p+=  results.get(i).getBathroom() + "bathrooms";
-            if(results.get(i).getFurnish()){
+            p+=  y.getBathroom() + "bathrooms";
+            if(y.getFurnish()){
                 p +='/';
                 p+=  "Furnished";
             }
@@ -678,7 +679,7 @@ public class GUI extends JFrame{
                 p+=  "Not Furnished";
             }
             p +='/';
-            p+=  results.get(i).getQuadrant();
+            p+=  y.getQuadrant();
             lists.add(p);
         }
         JScrollPane scroll = new JScrollPane();

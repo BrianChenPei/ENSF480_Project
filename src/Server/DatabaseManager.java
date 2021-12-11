@@ -100,7 +100,7 @@ public class DatabaseManager{
     	return false;
     }
 
-	public boolean changePeriod(String newPS, String newPE, int ID) {
+	public boolean changePeriod(String newPS, String newPE, String ID) {
     	Connection conn = null;
     	PreparedStatement changePeriod = null;
     	String changePeriodString = "UPDATE Property SET PeriodStart = ?, PeriodEnd = ? WHERE ID = ?";
@@ -110,7 +110,7 @@ public class DatabaseManager{
     			changePeriod = conn.prepareStatement(changePeriodString);
     			changePeriod.setString(1, newPS);
 				changePeriod.setString(2, newPE);
-    			changePeriod.setInt(3, ID);
+    			changePeriod.setString(3, ID);
     			changePeriod.executeUpdate();
     			conn.close();
     			return true;
@@ -159,7 +159,7 @@ public class DatabaseManager{
         			Property p = new Property(rs.getString(1),rs.getString(2),rs.getInt(3),
 					rs.getInt(4),rs.getBoolean(5),rs.getString(6),rs.getString(7),
 					rs.getString(8),rs.getString(9),rs.getString(10),rs.getString(11));
-					conn.close();
+					//conn.close();
         			temp.add(p);
         		}
         		conn.close();
@@ -560,9 +560,15 @@ public class DatabaseManager{
 		// db.addProperty(townhouse2);
 
 		Landlord k = new Landlord("kait", "Landlord", "Kaitlin", "Culligan", "k@ucalgary.ca", "password");
-		//db.addLandlord(k);
+		Manager a = new Manager("brian", "Manager", "Brian", "Chen", "b@ucalgary.ca", "password");
+		//db.addManager(a);
+		RegisteredRenter z = new RegisteredRenter("zheng", "Registered Renter", "Zeng", "Chen", "z@ucalgary.ca", "password");
+		//db.addRegRenter(z);
 
-		Report r = db.getReport("2014-09-07", "2016-11-07");
-		System.out.println(r.Display());
+		ArrayList<Property> ls = db.getAllProperties();
+		for (Property p : ls) {
+			System.out.println(p.getID());
+		}
+		//System.out.println(r.Display());
 	}	
 }
