@@ -160,6 +160,13 @@ public class RegisteredRenter implements User{
 		channel = ch;
 	}
 
+    /**
+     * returns the "channel" for the observer
+     * @return channel
+     */
+    public Observer getObserver(){
+        return channel;
+    }
 /*
 	public static void main(String[] args){
         RegisteredRenter r1 = new RegisteredRenter("bob1", "Registered Renter", "Bob", "Ross", "blah@gmail.com", "12345");

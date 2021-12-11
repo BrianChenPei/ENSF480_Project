@@ -30,15 +30,24 @@ class Login {
             return false;
         }else if(accountType.equals("Landlord")){
             landlord = prms.getLandlord(username);
-            return true;
+            if(landlord.getPassword().equals(password)){
+                 return true;
+            }
+            landlord = null;
         }
         else if(accountType.equals("Manager")){
             manager = prms.getManager(username);
-            return true;
+            if(manager.getPassword().equals(password)){
+                return true;
+           }
+           manager = null;
         }
         else if(accountType.equals("Registered Renter")){
             registeredRenter = prms.getRegisteredRenter(username);
-            return true;
+            if(registeredRenter.getPassword().equals(password)){
+                return true;
+           }
+           registeredRenter = null;
         }
         return false;
     }
