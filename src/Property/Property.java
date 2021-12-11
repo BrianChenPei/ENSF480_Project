@@ -29,6 +29,8 @@ public class Property {
     private String landlordName; //11
     private String landlordEmail; //12
 
+    public static int counter = 1;
+
     /**
      * Property constructor with no id, ls, feeStart, feeEnd, Lln, Lle parameters.
      * @param type
@@ -43,6 +45,9 @@ public class Property {
         this.bathroom = bath;
         this.furnished = furn;
         this.quadrant = add;
+        this.id = String.valueOf(counter);
+        this.listingState = "Suspended";
+        counter++;
     }
 
     /**
