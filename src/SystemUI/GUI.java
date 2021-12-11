@@ -56,7 +56,6 @@ public class GUI extends JFrame{
         createSearchPanel();
         createLandlordPanel();
         createManagerPanel();
-        createNotificationPanel();
         createFrame();
     }
 
