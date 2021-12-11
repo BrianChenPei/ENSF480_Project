@@ -49,7 +49,7 @@ public class Report {
         display += String.format("Total number of active listing: %s\n\n",  HouseActive);
         display += String.format("%-" + 15 + "s", "Landlord");
         display += String.format("%-" + 10 + "s", "HouseID");
-        display += "House Address\n";
+        display += "House Quadrant\n";
 
         for(Property x: RentedHouseList){
             String temp = String.format("%-" + 15 + "s", x.getLandlordName());
