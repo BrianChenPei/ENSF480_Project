@@ -44,6 +44,7 @@ class Login {
         }
         else if(accountType.equals("Registered Renter")){
             registeredRenter = prms.getRegisteredRenter(username);
+            registeredRenter.setNewProperties(prms.getRR().getNewProperties());
             if(registeredRenter.getPassword().equals(password)){
                 return true;
            }

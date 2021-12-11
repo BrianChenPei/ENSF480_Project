@@ -23,6 +23,8 @@ public class RegisteredRenter implements User{
     private String lname;
     private String email;
     private String password;
+
+    private ArrayList<Property> properties = new ArrayList<Property>();
 	
 	private Observer channel = new Observer();
 	
@@ -44,6 +46,10 @@ public class RegisteredRenter implements User{
         this.usertype = type;
         this.email = email;
         this.password = password;
+    }
+
+    public RegisteredRenter(){
+
     }
 
     /**
@@ -147,9 +153,9 @@ public class RegisteredRenter implements User{
      * @param searchCriteria
      */
     public void update(Property searchCriteria) {
-		for(Property p : data.SearchProperties(searchCriteria)) {
-			System.out.println(p);
-		}
+
+		properties.add(searchCriteria);
+
 	}
 	
     /**
@@ -166,6 +172,14 @@ public class RegisteredRenter implements User{
      */
     public Observer getObserver(){
         return channel;
+    }
+
+    public ArrayList<Property> getNewProperties(){
+        return properties;
+    }
+
+    public void setNewProperties(ArrayList<Property> p){
+        properties = p;
     }
 /*
 	public static void main(String[] args){
