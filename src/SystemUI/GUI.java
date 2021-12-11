@@ -551,6 +551,7 @@ public class GUI extends JFrame{
                 JOptionPane.showMessageDialog(null, "Press the OK button below to pay",
                     "Please Pay", JOptionPane.PLAIN_MESSAGE);
                 //update prms again
+                    prms.changeState(Integer.parseInt(newListing.getID()), "Active");
                  frame.setContentPane(landlordPanel);
                  frame.validate();
                   }
@@ -736,6 +737,7 @@ public class GUI extends JFrame{
             menu.add(register);
         }
         else if(loggedIn && Login.getOnlyInstance().getType().equals("Registered Renter")){
+            createNotificationPanel();
             JMenuItem notif = new JMenuItem("Notifications");
             notif.addActionListener(
                 new ActionListener(){
