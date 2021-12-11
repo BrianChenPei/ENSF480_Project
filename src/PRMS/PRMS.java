@@ -211,6 +211,10 @@ public class PRMS {
         return rr;
     }
 
+    public ArrayList<String> getAllUsers(){
+        return db.getAllUsers();
+    }
+
     /*public static void main(String[] args){
         PRMS system = new PRMS();
     }*/
