@@ -53,12 +53,16 @@ class Login {
         return false;
     }
 
+    public void setType(String t){
+        this.type = t;
+    }
 
     public boolean logout(){
         landlord = null;
         manager = null;
         registeredRenter = null;
         type = null;
+        onlyInstance = null;
         return false;
     }
 

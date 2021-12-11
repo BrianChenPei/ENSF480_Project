@@ -76,7 +76,8 @@ public class GUI extends JFrame{
      * logs out logged in user
      */
     public void logout(){
-        loggedIn = Login.getOnlyInstance().logout();
+        loggedIn = false;
+        Login.getOnlyInstance().logout();
         createManagerPanel();
         createLandlordPanel();
         updateMenuBar();
@@ -138,7 +139,7 @@ public class GUI extends JFrame{
                                 frame.revalidate();
                             }
                         });
-                        menu.remove(4);
+                        //menu.remove(4);
                         loginPanel.add(logoutButton, c);
                         updateMenuBar();
                     }
@@ -235,17 +236,18 @@ public class GUI extends JFrame{
      */
     private void createPropertyPanel(ArrayList<Property> results){
         propertyPanel = new JPanel(new BorderLayout());
-        ArrayList<String> lists = new ArrayList<>(15);
+        ArrayList<String> lists = new ArrayList<>();
         //make Strings out of query results
-        for(int i = 0; i < 15; i++){
-            String p = results.get(i).getType();
+        for(Property y : results){
+
+            String p = y.getType();
             p +='/';
-            p+=  results.get(i).getQuadrant();
+            p+=  y.getQuadrant();
             p +='/';
-            p+=  results.get(i).getBedRoom() + "bedrooms";
+            p+=  y.getBedRoom() + "bedrooms";
             p +='/';
-            p+=  results.get(i).getBathroom() + "bathrooms";
-            if(results.get(i).getFurnish()){
+            p+=  y.getBathroom() + "bathrooms";
+            if(y.getFurnish()){
                 p +='/';
                 p+=  "Furnished";
             }
@@ -254,7 +256,7 @@ public class GUI extends JFrame{
                 p+=  "Not Furnished";
             }
             p +='/';
-            p+=  results.get(i).getQuadrant();
+            p+=  y.getQuadrant();
             lists.add(p);
         }
         JScrollPane scroll = new JScrollPane();
@@ -424,17 +426,18 @@ public class GUI extends JFrame{
     private void createNotificationPanel(){
         notificationPanel = new JPanel(new BorderLayout());
         ArrayList<Property> results = Login.getOnlyInstance().getRegisteredRenter().getNewProperties();
-        ArrayList<String> lists = new ArrayList<>(15);
+        ArrayList<String> lists = new ArrayList<>();
         //make Strings out of query results
-        for(int i = 0; i < 15; i++){
-            String p = results.get(i).getType();
+        for(Property y : results){
+
+            String p = y.getType();
             p +='/';
-            p+=  results.get(i).getQuadrant();
+            p+=  y.getQuadrant();
             p +='/';
-            p+=  results.get(i).getBedRoom() + "bedrooms";
+            p+=  y.getBedRoom() + "bedrooms";
             p +='/';
-            p+=  results.get(i).getBathroom() + "bathrooms";
-            if(results.get(i).getFurnish()){
+            p+=  y.getBathroom() + "bathrooms";
+            if(y.getFurnish()){
                 p +='/';
                 p+=  "Furnished";
             }
@@ -443,7 +446,7 @@ public class GUI extends JFrame{
                 p+=  "Not Furnished";
             }
             p +='/';
-            p+=  results.get(i).getQuadrant();
+            p+=  y.getQuadrant();
             lists.add(p);
         }
         JScrollPane scroll = new JScrollPane();
@@ -563,8 +566,8 @@ public class GUI extends JFrame{
                     Property newListing = new Property(typeField.getText(), bedrooms, bathrooms, furnished, quadField.getText());
                     newListing.setLandlordName(Login.getOnlyInstance().getLandlord().getFname());
                     newListing.setLandlordEmail(Login.getOnlyInstance().getLandlord().getEmail());
-                    newListing.setFeePeriodStart(startField);
-                    newListing.setFeePeriodEnd(endField);
+                    newListing.setFeePeriodStart(startField.getText());
+                    newListing.setFeePeriodEnd(endField.getText());
                     prms.registerProperty(newListing);
                 JOptionPane.showMessageDialog(null, "Press the OK button below to pay",
                     "Please Pay", JOptionPane.PLAIN_MESSAGE);
