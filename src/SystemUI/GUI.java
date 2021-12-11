@@ -143,6 +143,10 @@ public class GUI extends JFrame{
                         loginPanel.add(logoutButton, c);
                         updateMenuBar();
                     }
+                    else{
+                        JLabel loginError = new JLabel("Incorrect username or password");
+                        loginPanel.add(loginError, c);
+                    }
                     frame.validate();
                 }
             }
@@ -420,19 +424,37 @@ public class GUI extends JFrame{
      */
     private void createNotificationPanel(){
         notificationPanel = new JPanel(new BorderLayout());
+        ArrayList<Property> results = Login.getOnlyInstance().getRegisteredRenter().getNewProperties();
         ArrayList<String> lists = new ArrayList<>(15);
         //make Strings out of query results
         for(int i = 0; i < 15; i++){
-            lists.add("TESTTESTTESTESTESTESTESTESTESTESTESTESTESTESTEST"+String.valueOf(i));
+            String p = results.get(i).getType();
+            p +='/';
+            p+=  results.get(i).getQuadrant();
+            p +='/';
+            p+=  results.get(i).getBedRoom() + "bedrooms";
+            p +='/';
+            p+=  results.get(i).getBathroom() + "bathrooms";
+            if(results.get(i).getFurnish()){
+                p +='/';
+                p+=  "Furnished";
+            }
+            else{
+                p +='/';
+                p+=  "Not Furnished";
+            }
+            p +='/';
+            p+=  results.get(i).getQuadrant();
+            lists.add(p);
         }
         JScrollPane scroll = new JScrollPane();
         JList<String> list = new JList<String>(lists.toArray(new String[lists.size()]));
         list.addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent e){
                 int i = list.getSelectedIndex();
-               //Property p = results.get(i); What does this mean here? --Andres
-                //createEmailPanel(p);
-                previousPanel = notificationPanel;
+                Property p = results.get(i);
+                createEmailPanel(p);
+                previousPanel = propertyPanel;
                 frame.setContentPane(emailPanel);
                 frame.validate();
             }
@@ -683,11 +705,7 @@ public class GUI extends JFrame{
     private void createUserInfoPanel(){
        userInfoPanel = new JPanel(new BorderLayout());
 
-        ArrayList<String> lists = new ArrayList<>(15);
-        //make Strings out of query results
-        for(int i = 0; i < 15; i++){
-            lists.add("TESTTESTTESTESTESTESTESTESTESTESTESTESTESTESTEST"+String.valueOf(i));
-        }
+        ArrayList<String> lists = prms.getAllUsers();
         JScrollPane scroll = new JScrollPane();
         JList<String> list = new JList<String>(lists.toArray(new String[lists.size()]));
         list.addListSelectionListener(new ListSelectionListener(){
