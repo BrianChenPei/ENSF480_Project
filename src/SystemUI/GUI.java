@@ -736,6 +736,7 @@ public class GUI extends JFrame{
             menu.add(register);
         }
         else if(loggedIn && Login.getOnlyInstance().getType().equals("Registered Renter")){
+            createNotificationPanel();
             JMenuItem notif = new JMenuItem("Notifications");
             notif.addActionListener(
                 new ActionListener(){
