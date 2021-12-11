@@ -43,10 +43,6 @@ public class GUI extends JFrame{
 
     //control variables
     PRMS prms;
-    User user;
-    RegisteredRenter registeredRenter;
-    Landlord landlord;
-    Manager manager;
     boolean loggedIn = false;
     boolean notifications = true;
 
@@ -56,7 +52,6 @@ public class GUI extends JFrame{
     public GUI(){
         prms = new PRMS();
 
-        Login.getOnlyInstance();
         createLoginPanel();
         createSearchPanel();
         createLandlordPanel();
@@ -82,7 +77,7 @@ public class GUI extends JFrame{
      * logs out logged in user
      */
     public void logout(){
-        loggedIn = false;
+        loggedIn = Login.getOnlyInstance().logout();
         createManagerPanel();
         createLandlordPanel();
         updateMenuBar();
@@ -319,7 +314,7 @@ public class GUI extends JFrame{
      * sets up the landlord menu
      */
     private void createLandlordPanel(){
-        if(loggedIn){
+        if(loggedIn && Login.getOnlyInstance().getType().equals("Landlord")){
             landlordPanel = new JPanel(new BorderLayout());
             //create a menu bar for the buttons for landlord
             JMenuItem list = new JMenuItem("List");
@@ -359,7 +354,7 @@ public class GUI extends JFrame{
     private void createManagerPanel(){
         //create menu bar for buttons
         
-        if(loggedIn){
+        if(loggedIn && Login.getOnlyInstance().getType().equals("Manager")){
             managerPanel = new JPanel(new BorderLayout());
             JMenuItem report = new JMenuItem("Report");
             report.addActionListener(
@@ -451,11 +446,11 @@ public class GUI extends JFrame{
         optOutButton.addActionListener(
             new ActionListener(){
                 public void actionPerformed(ActionEvent evt){
-                    if(notifications == true){
-                        notifications = false;
+                    if(Login.getOnlyInstance().getRegisteredRenter().getObserver().checkSubscribed(Login.getOnlyInstance().getRegisteredRenter())){
+                        Login.getOnlyInstance().getRegisteredRenter().getObserver().unsubscribe(Login.getOnlyInstance().getRegisteredRenter());
                         optOutButton.setText("Notifications Off");
                     }else{
-                        notifications = true;
+                        Login.getOnlyInstance().getRegisteredRenter().getObserver().subscribe(Login.getOnlyInstance().getRegisteredRenter());
                         optOutButton.setText("Notifications On");
                     }
                     frame.validate();
@@ -529,7 +524,9 @@ public class GUI extends JFrame{
                         furnished = false;
                     }
                     Property newListing = new Property(typeField.getText(), bedrooms, bathrooms, furnished, quadField.getText());
-                prms.registerProperty(newListing);
+                    newListing.setLandlordName(Login.getOnlyInstance().getLandlord().getFname()+" "+Login.getOnlyInstance().getLandlord().getLname());
+                    newListing.setLandlordEmail(Login.getOnlyInstance().getLandlord().getEmail());
+                    prms.registerProperty(newListing);
                 JOptionPane.showMessageDialog(null, "Press the OK button below to pay",
                     "Please Pay", JOptionPane.PLAIN_MESSAGE);
                 //update prms again
@@ -606,6 +603,19 @@ public class GUI extends JFrame{
         enterButton.addActionListener(new ActionListener(){
                 public void actionPerformed(ActionEvent evt){
                     //register in system
+                    String userName = usernameField.getText();
+                    String type = typeField.getText();
+                    String fname = fNameField.getText();
+                    String lname = lNameField.getText();
+                    String email = emailField.getText();
+                    String password = passwordField.getText();
+                    if(typeField.getText().equals("Landlord")){
+                        prms.addUser(new Landlord(userName, type, fname, lname, email, password));
+                    }else if(typeField.getText().equals("Manager")){
+                        prms.addUser(new Manager(userName, type, fname, lname, email, password));
+                    }else if(typeField.getText().equals("Registered Renter")){
+                        prms.addUser(new RegisteredRenter(userName, type, fname, lname, email, password));
+                    }
                     frame.validate();
                 }
             }
@@ -620,20 +630,47 @@ public class GUI extends JFrame{
      */
     private void createModifyPanel(){
         modifyPanel = new JPanel(new BorderLayout());
-
+        ArrayList<Property> results;
+        if(Login.getOnlyInstance().getType().equals("Landlord")){
+            results = prms.landlordPropertyEdit(Login.getOnlyInstance().getLandlord().getFname()+" "+ Login.getOnlyInstance().getLandlord().getFname());
+        }
+        else{
+            results = prms.managerPropertyEdit();
+        }
         ArrayList<String> lists = new ArrayList<>(15);
         //make Strings out of query results
         for(int i = 0; i < 15; i++){
-            lists.add("TESTTESTTESTESTESTESTESTESTESTESTESTESTESTESTEST"+String.valueOf(i));
+            String p = results.get(i).getType();
+            p +='/';
+            p+=  results.get(i).getQuadrant();
+            p +='/';
+            p+=  results.get(i).getBedRoom() + "bedrooms";
+            p +='/';
+            p+=  results.get(i).getBathroom() + "bathrooms";
+            if(results.get(i).getFurnish()){
+                p +='/';
+                p+=  "Furnished";
+            }
+            else{
+                p +='/';
+                p+=  "Not Furnished";
+            }
+            p +='/';
+            p+=  results.get(i).getQuadrant();
+            lists.add(p);
         }
         JScrollPane scroll = new JScrollPane();
         JList<String> list = new JList<String>(lists.toArray(new String[lists.size()]));
         list.addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent e){
+                int i = list.getSelectedIndex();
+                Property p = results.get(i);
                 String state = JOptionPane.showInputDialog(null, "Please enter the new listing state");
-                //update PRMS
+                prms.changeState(Integer.parseInt(p.getID()), state);
             }
         });
+
+
         scroll.setViewportView(list);
         list.setLayoutOrientation(JList.VERTICAL);
         scroll.createVerticalScrollBar();
@@ -681,7 +718,7 @@ public class GUI extends JFrame{
             );
             menu.add(register);
         }
-        else{
+        else if(loggedIn && Login.getOnlyInstance().getType().equals("Registered Renter")){
             JMenuItem notif = new JMenuItem("Notifications");
             notif.addActionListener(
                 new ActionListener(){
@@ -694,7 +731,7 @@ public class GUI extends JFrame{
             );
             
             //if theres new listings and notifications is on
-            if(notifications){
+            if(Login.getOnlyInstance().getRegisteredRenter().getObserver().checkSubscribed(Login.getOnlyInstance().getRegisteredRenter())){
                notif.setBackground(Color.RED);
             }
             menu.add(notif);   

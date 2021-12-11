@@ -3,6 +3,15 @@ package PRMS;
 import java.util.ArrayList;
 import Property.*;
 
+/**
+ * @author Zheng Chen <a
+ * href="mailto: zheng.chen1@ucalgary.ca</a>
+
+ * @version 1.0
+ * 
+ * @since 1.0
+ */
+
 public class Report {
     private String start;
     private String end;
@@ -11,7 +20,15 @@ public class Report {
     private int HouseActive;   
     private ArrayList<Property> RentedHouseList;
 
-
+    /**
+     * Report Constructor.
+     * @param start
+     * @param end
+     * @param HouseListed
+     * @param HouseRented
+     * @param HouseActive
+     * @param RentedHouseList
+     */
     public Report(String start, String end, int HouseListed, int HouseRented, int HouseActive, ArrayList<Property> RentedHouseList) {
         this.start = start;
         this.end = end;
@@ -22,6 +39,10 @@ public class Report {
     }
 
     //Return a formatted report as a String
+    /**
+     * display function to display all attributes in the report requirement
+     * @return String
+     */
     public String Display(){
         String display=String.format("Total number of houses listed in the period: %s\n", HouseListed);
         display += String.format("Total number of houses rented in the period: %s\n",HouseRented);

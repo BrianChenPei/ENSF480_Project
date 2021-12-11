@@ -7,7 +7,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-
+/**
+ * @author Andres Caicedo <a 
+ * href="mailto: acaicedo@ucalgary.ca</a> 
+ * 
+ * @version 1.0
+ * 
+ * @since 1.0
+ */
 
 import PRMS.Report;
 import Property.Property;
