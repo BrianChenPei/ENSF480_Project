@@ -175,7 +175,7 @@ public class DatabaseManager{
     public ArrayList<Property> SearchProperties(Property search){
         Connection conn = null;
         PreparedStatement getProperties = null;
-        String getPropertiesString = "SELECT * from Property WHERE type = ? AND Bedrooms = ? AND Bathrooms = ? AND Furnished = ? AND CityQuadrant = ? AND State = 'Available'";
+        String getPropertiesString = "SELECT * from Property WHERE type = ? AND Bedrooms = ? AND Bathrooms = ? AND Furnished = ? AND CityQuadrant = ? AND State = 'Active'";
         ArrayList<Property> temp = new ArrayList<Property>();
         try {
         	conn = getConn();
@@ -475,7 +475,8 @@ public class DatabaseManager{
 	public Report getReport(String start, String end) {
     	Connection conn = null;
     	PreparedStatement getReport = null;
-    	String getListedString = "SELECT COUNT(*) AS NumberOfListed FROM Property WHERE strftime('%s', PeriodStart) ";
+		String getListedString = "SELECT COUNT(*) AS NumberOfListed FROM Property WHERE \r\n" + 
+		"        strftime('%s', PeriodStart) BETWEEN strftime('%s', ?) AND strftime('%s', ?)";
     	String getRentedString = "SELECT COUNT(*) AS NumberOfRented FROM Property WHERE \r\n" + 
     			"  		 strftime('%s', PeriodStart) BETWEEN strftime('%s', ?) AND strftime('%s', ?) AND State = 'Rented'";
     	String getActiveString = "SELECT COUNT(*) AS NumberOfActive FROM Property WHERE \r\n" + 
@@ -489,26 +490,26 @@ public class DatabaseManager{
     			getReport = conn.prepareStatement(getListedString);
     			getReport.setString(1, start);
     			getReport.setString(2, end);
-    			ResultSet rs = getReport.executeQuery();
+    			ResultSet all = getReport.executeQuery();
     			getReport = conn.prepareStatement(getRentedString);
     			getReport.setString(1, start);
     			getReport.setString(2, end);
-    			ResultSet rs1 = getReport.executeQuery();
+    			ResultSet rented = getReport.executeQuery();
     			getReport = conn.prepareStatement(getActiveString);
     			getReport.setString(1, start);
     			getReport.setString(2, end);
-    			ResultSet rs2 = getReport.executeQuery();
+    			ResultSet active = getReport.executeQuery();
     			getReport = conn.prepareStatement(getAllRentedString);
     			getReport.setString(1, start);
     			getReport.setString(2, end);
-    			ResultSet rs3 = getReport.executeQuery();
-    			while(rs3.next()) {
-        			Property p = new Property(rs3.getString(1),rs3.getString(2),rs3.getInt(3),
-					rs3.getInt(4),rs3.getBoolean(5),rs3.getString(6),rs3.getString(7),
-					rs3.getString(8),rs3.getString(9),rs.getString(10),rs3.getString(11));
+    			ResultSet rs = getReport.executeQuery();
+    			while(rs.next()) {
+        			Property p = new Property(rs.getString(1),rs.getString(2),rs.getInt(3),
+					rs.getInt(4),rs.getBoolean(5),rs.getString(6),rs.getString(7),
+					rs.getString(8),rs.getString(9),rs.getString(10),rs.getString(11));
         			temp.add(p);
     			}
-    			Report Report = new Report(start, end, rs.getInt(1), rs1.getInt(1), rs2.getInt(1), temp);
+    			Report Report = new Report(start, end, all.getInt(1), rented.getInt(1), active.getInt(1), temp);
 
     			return Report;
     		}
@@ -545,42 +546,20 @@ public class DatabaseManager{
 
 	public static void main(String[] args) {
 		DatabaseManager db = new DatabaseManager();
-		// Property Ahouse = new Property("Attached House", 2, 2, true, "NE");
-		//Property apartment = new Property("1235", "Apartment", 2, 1, false, "NW", "Available", "2014-10-07 02:34:56", "2017-10-07 02:34:56", "Mike", "mike@ucalgary.ca");
-		// db.addProperty(Ahouse);
-		//db.addProperty(apartment);
-		// Manager  m = new Manager("acaicedo", "Manager", "Andres", "Caicedo", "acaicedo@ucalgary.ca", "password");
-		// db.addManager(m);
-		// RegisteredRenter  r = new RegisteredRenter("kaitlin12", "Registered Renter", "Kaitlin", "Culligan", "kcull@ucalgary.ca", "password");
-		// db.addRegRenter(r);
-		//Landlord  d = new Landlord("zheng", "Landlord", "Zheng", "Chen", "zchen@ucalgary.ca", "p1234567");
-		//db.addLandlord(d);
+		Property apartment1 = new Property("123", "Apartment", 2, 1, true, "NW", "Active", "2014-10-07", "2017-10-07", "Andres", "a@ucalgary.ca");
+		Property apartment2 = new Property("124", "Apartment", 2, 2, false, "NE", "Active", "2015-10-07", "2019-10-07", "Kaitlin", "k@ucalgary.ca");
+		Property house1 = new Property("125", "Attached House", 2, 1, false, "SE", "Active", "2014-10-07", "2017-10-07", "Kaitlin", "k@ucalgary.ca");
+		Property house2 = new Property("126", "Detached House", 3, 3, false, "NW", "Cancelled", "2014-10-07", "2017-10-07", "Zheng", "z@ucalgary.ca");
+		Property townhouse1 = new Property("127", "Townhouse", 2, 2, false, "SW", "Suspended", "2014-10-07", "2018-10-07", "Brian", "b@ucalgary.ca");
+		Property townhouse2 = new Property("128", "Townhouse", 3, 2, false, "NW", "Rented", "2014-10-07", "2017-10-07", "Zheng", "z@ucalgary.ca");
+		// db.addProperty(apartment1);
+		// db.addProperty(apartment2);
+		// db.addProperty(house1);
+		// db.addProperty(house2);
+		// db.addProperty(townhouse1);
+		// db.addProperty(townhouse2);
 
-		ArrayList<String> list = db.getAllUsers();
-
-		Report r = db.getReport("2014-10-07", "2017-10-07");
-		r.Display();
-		// for (String p : list){
-		// 	System.out.println(p);
-		// }
-		// String type = db.checkAccount("none");
-
-		// if (type != "NE"){
-		// 	System.out.println("Account exist!: " + type);
-		// }
-		// else{
-		// 	System.out.println("Account does not exist");
-		// }
-		// String username = "zheng";
-		// String typee = db.checkAccount(username);
-		// if (typee != "NE"){
-		// 	System.out.println("Account exist!: " + typee);
-		// 	//if else if else
-		// 	Landlord p = db.getLandlord(username);
-		// 	System.out.println(p.getPassword());
-		// }
-		// else{
-		// 	System.out.println("Account does not exist");
-		// }
+		Report r = db.getReport("2014-09-07", "2016-11-07");
+		System.out.println(r.Display());
 	}	
 }
