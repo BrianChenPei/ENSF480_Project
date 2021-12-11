@@ -559,6 +559,9 @@ public class DatabaseManager{
 		// db.addProperty(townhouse1);
 		// db.addProperty(townhouse2);
 
+		Landlord k = new Landlord("kait", "Landlord", "Kaitlin", "Culligan", "k@ucalgary.ca", "password");
+		//db.addLandlord(k);
+
 		Report r = db.getReport("2014-09-07", "2016-11-07");
 		System.out.println(r.Display());
 	}	
