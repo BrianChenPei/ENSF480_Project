@@ -1,9 +1,5 @@
 package Users;
-import java.util.ArrayList; 
-import Property.Property;
 
-import java.util.ArrayList;
-import Property.*;
 
 /**
  * @author Zheng Chen <a
