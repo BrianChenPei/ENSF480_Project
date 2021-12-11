@@ -149,7 +149,7 @@ public class RegisteredRenter implements User{
      * @param searchCriteria
      */
     public void update(Property searchCriteria) {
-		properties = (ArrayList<Property>)(data.SearchProperties(searchCriteria)).clone();
+        properties = new ArrayList<>(data.SearchProperties(searchCriteria));
 	}
 	
     /**
