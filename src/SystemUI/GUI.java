@@ -446,11 +446,11 @@ public class GUI extends JFrame{
         optOutButton.addActionListener(
             new ActionListener(){
                 public void actionPerformed(ActionEvent evt){
-                    if(notifications == true){
-                        notifications = false;
+                    if(Login.getOnlyInstance().getRegisteredRenter().getObserver().checkSubscribed(Login.getOnlyInstance().getRegisteredRenter())){
+                        Login.getOnlyInstance().getRegisteredRenter().getObserver().unsubscribe(Login.getOnlyInstance().getRegisteredRenter());
                         optOutButton.setText("Notifications Off");
                     }else{
-                        notifications = true;
+                        Login.getOnlyInstance().getRegisteredRenter().getObserver().subscribe(Login.getOnlyInstance().getRegisteredRenter());
                         optOutButton.setText("Notifications On");
                     }
                     frame.validate();
@@ -718,7 +718,7 @@ public class GUI extends JFrame{
             );
             menu.add(register);
         }
-        else{
+        else if(loggedIn && Login.getOnlyInstance().getType().equals("Registered Renter")){
             JMenuItem notif = new JMenuItem("Notifications");
             notif.addActionListener(
                 new ActionListener(){
@@ -731,7 +731,7 @@ public class GUI extends JFrame{
             );
             
             //if theres new listings and notifications is on
-            if(notifications){
+            if(Login.getOnlyInstance().getRegisteredRenter().getObserver().checkSubscribed(Login.getOnlyInstance().getRegisteredRenter())){
                notif.setBackground(Color.RED);
             }
             menu.add(notif);   
