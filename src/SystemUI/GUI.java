@@ -551,6 +551,7 @@ public class GUI extends JFrame{
                 JOptionPane.showMessageDialog(null, "Press the OK button below to pay",
                     "Please Pay", JOptionPane.PLAIN_MESSAGE);
                 //update prms again
+                    prms.changeState(Integer.parseInt(newListing.getID()), "Active");
                  frame.setContentPane(landlordPanel);
                  frame.validate();
                   }
