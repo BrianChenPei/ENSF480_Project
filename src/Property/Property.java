@@ -29,7 +29,7 @@ public class Property {
     private String landlordName; //11
     private String landlordEmail; //12
 
-    public static int counter = 1;
+    public static int counter = 12;
 
     /**
      * Property constructor with no id, ls, feeStart, feeEnd, Lln, Lle parameters.
